@@ -4,17 +4,20 @@ import { API } from "../constants/api";
 import Loader from "../components/common/Loader";
 import ProductCard from "../components/products/ProductCard";
 import AlertBox from "../components/common/AlertBox";
+import { useLocale } from "../context/LocaleContext";
 
 export default function Home() {
-  const locale = "en";
+  const { locale } = useLocale();
   const [products, setProducts] = useState([]);
+  const [recommended, setRecommended] = useState([]);
   const [catalogs, setCatalogs] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
   const [initialLoad, setInitialLoad] = useState(true);
 
-  // 🧠 Fetch products
+  // 🧠 Fetch latest products
   const fetchProducts = async (page = 1, append = false) => {
     setLoading(true);
     setError("");
@@ -39,7 +42,7 @@ export default function Home() {
     }
   };
 
-  // 🧠 Fetch catalogs
+  // 🧩 Fetch catalogs
   const fetchCatalogs = async () => {
     try {
       const res = await api.get(API.CATALOG.LIST(locale));
@@ -49,10 +52,29 @@ export default function Home() {
     }
   };
 
+  // 🤖 Fetch AI recommended products
+  const fetchRecommended = async (isRefresh = false) => {
+    if (isRefresh) setRefreshing(true);
+    try {
+      const res = await api.get(API.PRODUCT.RECOMMENDED(locale));
+      const data = res.data?.recommendations || [];
+      setRecommended(data);
+    } catch (err) {
+      console.error("❌ Recommended fetch failed", err);
+    } finally {
+      if (isRefresh) setTimeout(() => setRefreshing(false), 800);
+    }
+  };
+
+  // 🔁 Auto-refresh recommended every 20 seconds
   useEffect(() => {
     fetchProducts();
     fetchCatalogs();
-  }, []);
+    fetchRecommended();
+
+    const interval = setInterval(() => fetchRecommended(true), 20000);
+    return () => clearInterval(interval);
+  }, [locale]);
 
   const handleLoadMore = () => {
     if (pagination && pagination.current_page < pagination.last_page) {
@@ -96,13 +118,15 @@ export default function Home() {
           <div className="row g-4 justify-content-center">
             {catalogs.slice(0, 4).map((cat) => (
               <div key={cat.id} className="col-6 col-md-3 text-center">
-                <div className="category-card p-3 border rounded-3 shadow-sm">
+                <div className="category-card p-3 border rounded-3 shadow-sm hover-shadow transition">
                   <div
                     className="rounded-circle mx-auto mb-3"
                     style={{
                       width: "120px",
                       height: "120px",
-                      backgroundImage: `url(${cat.image || "/img/categories/default.jpg"})`,
+                      backgroundImage: `url(${
+                        cat.image || "/img/categories/default.jpg"
+                      })`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
@@ -115,8 +139,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 🛍️ Product Section */}
-      <section className="products py-5 bg-light">
+      {/* 🤖 AI Recommended Products */}
+      {recommended.length > 0 && (
+        <section className="recommended-products py-5 bg-light position-relative">
+          <div className="container">
+            <div className="text-center mb-4">
+              <h3 className="fw-bold text-uppercase">
+                <i className="fa fa-robot text-primary me-2"></i>
+                AI Recommended For You
+              </h3>
+              <p className="text-muted small mb-1">
+                Auto-refreshing recommendations every <b>20s</b>
+              </p>
+
+              {refreshing && (
+                <div className="d-inline-block small text-success">
+                  <i className="fa fa-sync-alt fa-spin me-1"></i>Refreshing...
+                </div>
+              )}
+            </div>
+
+            <div className="row g-4 justify-content-center">
+              {recommended.slice(0, 8).map((product) => (
+                <div
+                  key={product.id}
+                  className="col-sm-6 col-md-4 col-lg-3 d-flex"
+                >
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 🛍️ Latest Products */}
+      <section className="products py-5">
         <div className="container">
           <h3 className="mb-4 text-center fw-bold">Latest Products</h3>
 
@@ -141,7 +199,6 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Load More */}
               {pagination &&
                 pagination.current_page < pagination.last_page && (
                   <div className="text-center mt-5">
