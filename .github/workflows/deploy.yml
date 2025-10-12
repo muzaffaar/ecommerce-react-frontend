@@ -28,7 +28,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "dist/*"
           target: "/var/www/ecommerce"
@@ -37,7 +37,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             sudo systemctl reload nginx
