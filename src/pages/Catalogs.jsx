@@ -35,7 +35,6 @@ export default function Catalogs() {
     fetchCatalogs(1);
   }, [locale]);
 
-  // 📘 Pagination buttons
   const renderPagination = () => {
     if (!pagination || pagination.last_page <= 1) return null;
     const pages = [];
@@ -69,9 +68,7 @@ export default function Catalogs() {
         )}
         {pages.map((p, idx) =>
           p === "..." ? (
-            <span key={idx} className="mx-1 text-muted">
-              ...
-            </span>
+            <span key={idx} className="mx-1 text-muted">...</span>
           ) : (
             <a
               href="#"
@@ -103,7 +100,6 @@ export default function Catalogs() {
 
   return (
     <>
-      {/* Breadcrumb */}
       <section className="breadcrumb-option">
         <div className="container">
           <div className="row">
@@ -120,7 +116,6 @@ export default function Catalogs() {
         </div>
       </section>
 
-      {/* Catalog Section */}
       <section className="shop spad">
         <div className="container">
           <div className="section-title text-center mb-5">
@@ -134,7 +129,6 @@ export default function Catalogs() {
             <AlertBox type="secondary" message="No catalogs available." />
           )}
 
-          {/* Catalog Grid */}
           <div className="row">
             {catalogs.map((catalog) => {
               const firstImage =
@@ -145,7 +139,7 @@ export default function Catalogs() {
               return (
                 <div key={catalog.id} className="col-lg-4 col-md-6 col-sm-6 mb-4">
                   <div className="catalog__item">
-                    <Link to={`/catalog/${catalog.slug}/products`}>
+                    <Link to={`/products?catalog_id=${catalog.id}`}>
                       <div className="catalog__item__img">
                         <img src={firstImage} alt={catalog.name} />
                       </div>
@@ -157,8 +151,10 @@ export default function Catalogs() {
                           ? catalog.description.slice(0, 80) + "..."
                           : catalog.description || "Explore our latest collection."}
                       </p>
+
+                      {/* View Products button -> /products?catalog_id=... */}
                       <Link
-                        to={`/catalog/${catalog.slug}/products`}
+                        to={`/products?catalog_id=${catalog.id}`}
                         className="btn btn-dark btn-sm mt-3 px-4"
                       >
                         View Products
@@ -170,9 +166,7 @@ export default function Catalogs() {
             })}
           </div>
 
-          {/* Pagination */}
           {!loading && !error && catalogs.length > 0 && renderPagination()}
-        
         </div>
       </section>
     </>
