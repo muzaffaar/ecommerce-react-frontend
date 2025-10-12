@@ -28,7 +28,15 @@ export default function AlertBox({ type = "info", message, duration = 4000 }) {
   const { bg, text, accent } = getColors();
 
   return (
-    <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 2000 }}>
+    <div
+      className="position-fixed top-0 end-0 p-3"
+      style={{
+        zIndex: 99999,           // ensures alert is always visible on top
+        top: "80px",             // just below navbar
+        right: "20px",
+        pointerEvents: "none",   // allow clicks through background
+      }}
+    >
       <div
         className="shadow-lg fade show border-0 rounded-3 position-relative"
         role="alert"
@@ -38,15 +46,13 @@ export default function AlertBox({ type = "info", message, duration = 4000 }) {
           minWidth: "300px",
           padding: "1rem 1.2rem",
           borderLeft: `6px solid ${accent}`,
-          animation: "slideIn 0.4s ease-out",
+          animation: "slideIn 0.4s ease-out, fadeOut 0.5s ease-in ${duration - 600}ms forwards",
           boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          pointerEvents: "auto", // enable close button click
         }}
       >
         <div className="d-flex justify-content-between align-items-start">
-          <div>
-            
-            <span>{message}</span>
-          </div>
+          <div style={{ fontWeight: 500 }}>{message}</div>
 
           {/* ✖️ Modern close button */}
           <button
@@ -74,12 +80,19 @@ export default function AlertBox({ type = "info", message, duration = 4000 }) {
         {`
         @keyframes slideIn {
           from {
-            transform: translateY(-20px);
+            transform: translateY(-15px);
             opacity: 0;
           }
           to {
             transform: translateY(0);
             opacity: 1;
+          }
+        }
+
+        @keyframes fadeOut {
+          to {
+            transform: translateY(-10px);
+            opacity: 0;
           }
         }
       `}

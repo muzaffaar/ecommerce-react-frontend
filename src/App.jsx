@@ -16,6 +16,7 @@ import EmailVerify from "./pages/EmailVerify";
 import EmailVerified from "./pages/EmailVerified";
 import Orders from "./pages/orders/Orders";
 import Products from "./pages/Products";
+import Contact from "./pages/Contact";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/email/verify/:id/:hash" element={<EmailVerify />} />
           <Route path="/email-verified" element={<EmailVerified />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/contact" element={<Contact />} />
           <Route
             path="/cart"
             element={
