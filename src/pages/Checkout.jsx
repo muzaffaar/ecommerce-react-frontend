@@ -324,6 +324,7 @@ export default function Checkout() {
 function PaymentForm({ clientSecret }) {
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate(); // ✅ added
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -346,7 +347,12 @@ function PaymentForm({ clientSecret }) {
     if (error) {
       setMessage(error.message);
     } else if (paymentIntent.status === "succeeded") {
-      setMessage("✅ Payment successful! Thank you for your order.");
+      setMessage("✅ Payment successful! Redirecting to your orders...");
+      
+      // 🕒 small delay so user can see success message
+      setTimeout(() => {
+        navigate("/orders"); // ✅ redirect to orders page
+      }, 1500);
     }
 
     setLoading(false);
