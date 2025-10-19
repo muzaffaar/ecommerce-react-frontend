@@ -8,7 +8,6 @@ import Catalogs from "./pages/Catalogs";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import VerifyNotice from "./pages/VerifyNotice";
@@ -47,14 +46,6 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Checkout />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
               </ProtectedRoute>
             }
           />

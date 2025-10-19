@@ -4210,3 +4210,241 @@ ol {
     margin-top: 2rem;
   }
 }
+
+
+.modern-order-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+.modern-order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+}
+
+/* Header */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+.status-badge.completed {
+  background: #28a745;
+}
+.status-badge.cancelled {
+  background: #dc3545;
+}
+.status-badge.in-progress {
+  background: #0d6efd;
+}
+
+/* Timeline */
+.icon-timeline {
+  position: relative;
+  margin: 15px 0 25px;
+}
+.timeline-track {
+  position: absolute;
+  top: 34%;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  z-index: 1;
+  transform: translateY(-50%); /* 👈 Perfectly centers it vertically */
+}
+
+.icon-timeline.cancelled .timeline-track {
+  background: repeating-linear-gradient(
+    90deg,
+    #dc3545,
+    #dc3545 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+.timeline-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+.timeline-step {
+  flex: 1;
+  text-align: center;
+  color: #888;
+}
+.timeline-step small {
+  display: block;
+  font-size: 0.8rem;
+  margin-top: 6px;
+}
+
+/* Icon styles */
+.icon-container {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #ccc;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+.timeline-step.done .icon-container {
+  background: #28a745;
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+}
+.timeline-step.current .icon-container {
+  background: #0d6efd;
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.4);
+}
+.timeline-step.cancelled .icon-container {
+  background: #dc3545;
+  box-shadow: 0 0 8px rgba(220, 53, 69, 0.4);
+}
+
+/* Details */
+.order-details {
+  font-size: 0.9rem;
+  color: #555;
+}
+.order-details p {
+  margin: 4px 0;
+}
+.order-details ul {
+  margin-top: 4px;
+  padding-left: 18px;
+}
+
+
+.section-title {
+  display: flex;
+  align-items: right;
+  vertical-align: middle;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  color: #222;
+  margin: 0;           /* remove default h4 margin */
+  line-height: 1;      /* keep baseline compact */
+
+}
+
+.order-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-items li {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.order-items .badge {
+  font-size: 0.7rem;
+  vertical-align: middle;
+}
+
+.order-details p {
+  margin: 4px 0;
+}
+
+
+.catalog-card {
+  background: #fff;
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
+}
+
+.catalog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.catalog-image-wrapper {
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid #eee;
+}
+
+.catalog-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.catalog-card:hover .catalog-image {
+  transform: scale(1.05);
+}
+
+.catalog-info {
+  text-align: center;
+}
+
+.catalog-info h5 {
+  font-weight: 600;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.pagination a {
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 5px;
+  margin: 0 4px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.pagination a:hover,
+.pagination a.active {
+  border-color: #000;
+  background: #000;
+  color: #fff;
+}
+
+.contact-section {
+  background-color: #fafafa;
+}
+
+.contact-info i {
+  width: 25px;
+  text-align: center;
+}
+
+.contact-form .form-control {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.contact-form .form-control:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+}

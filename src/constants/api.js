@@ -15,6 +15,7 @@ export const API = {
     EMAIL_RESEND: (locale) => `${API_BASE}/${locale}/v1/email/resend`,
     EMAIL_VERIFY: (locale, id, hash) => `${API_BASE}/${locale}/v1/email/verify/${id}/${hash}`,
     GUEST_TOKEN: (locale) => `${API_BASE}/${locale}/v1/guest-token`,
+    GOOGLE_REDIRECT: `${API_BASE}/v1/auth/google/redirect`,
   },
 
   // ---------- CATALOG ----------

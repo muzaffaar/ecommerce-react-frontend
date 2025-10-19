@@ -341,7 +341,7 @@ const Products = () => {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row"> 
                 {products.length > 0 ? (
                   products.map((p) => (
                     <div key={p.id} className="col-lg-4 col-md-6 col-sm-6">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
-import { API } from "../constants/api";
+import { API, API_BASE } from "../constants/api";
 import AlertBox from "../components/common/AlertBox";
 import { useLocale } from "../context/LocaleContext";
 
@@ -11,6 +11,8 @@ export default function Catalogs() {
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const baseURL = String(API_BASE || "http://meetify.uz/api").replace("/api", "");
 
   const fetchCatalogs = async (page = 1) => {
     setLoading(true);
@@ -68,7 +70,9 @@ export default function Catalogs() {
         )}
         {pages.map((p, idx) =>
           p === "..." ? (
-            <span key={idx} className="mx-1 text-muted">...</span>
+            <span key={idx} className="mx-1 text-muted">
+              ...
+            </span>
           ) : (
             <a
               href="#"
@@ -100,26 +104,23 @@ export default function Catalogs() {
 
   return (
     <>
+      {/* Breadcrumb */}
       <section className="breadcrumb-option">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="breadcrumb__text">
-                <h4>Catalogs</h4>
-                <div className="breadcrumb__links">
-                  <Link to="/">Home</Link>
-                  <span>Catalogs</span>
-                </div>
-              </div>
+          <div className="breadcrumb__text">
+            <h4>Catalogs</h4>
+            <div className="breadcrumb__links">
+              <Link to="/">Home</Link>
+              <span>Catalogs</span>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Catalog Section */}
       <section className="shop spad">
         <div className="container">
           <div className="section-title text-center mb-5">
-            <span>Our Collections</span>
             <h2>Explore Catalogs</h2>
           </div>
 
@@ -133,29 +134,33 @@ export default function Catalogs() {
             {catalogs.map((catalog) => {
               const firstImage =
                 catalog.images?.[0]?.url
-                  ? `${import.meta.env.VITE_APP_BASE_URL}/storage/${catalog.images[0].url}`
+                  ? `${baseURL}/storage/${catalog.images[0].url}`
                   : "https://via.placeholder.com/400x250?text=No+Image";
 
               return (
                 <div key={catalog.id} className="col-lg-4 col-md-6 col-sm-6 mb-4">
-                  <div className="catalog__item">
+                  <div className="catalog-card shadow-sm rounded-3 h-100 overflow-hidden">
                     <Link to={`/products?catalog_id=${catalog.id}`}>
-                      <div className="catalog__item__img">
-                        <img src={firstImage} alt={catalog.name} />
+                      <div className="catalog-image-wrapper">
+                        <img
+                          src={firstImage}
+                          alt={catalog.name}
+                          className="catalog-image img-fluid"
+                          loading="lazy"
+                        />
                       </div>
                     </Link>
-                    <div className="catalog__item__text">
-                      <h5>{catalog.name}</h5>
-                      <p>
+                    <div className="catalog-info p-3">
+                      <h5 className="fw-bold mb-2">{catalog.name}</h5>
+                      <p className="text-muted mb-3">
                         {catalog.description?.length > 80
                           ? catalog.description.slice(0, 80) + "..."
-                          : catalog.description || "Explore our latest collection."}
+                          : catalog.description ||
+                            "Explore our latest collection."}
                       </p>
-
-                      {/* View Products button -> /products?catalog_id=... */}
                       <Link
                         to={`/products?catalog_id=${catalog.id}`}
-                        className="btn btn-dark btn-sm mt-3 px-4"
+                        className="btn btn-outline-dark btn-sm px-4 rounded-pill"
                       >
                         View Products
                       </Link>

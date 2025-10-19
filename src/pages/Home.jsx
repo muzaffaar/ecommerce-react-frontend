@@ -5,6 +5,7 @@ import Loader from "../components/common/Loader";
 import ProductCard from "../components/products/ProductCard";
 import AlertBox from "../components/common/AlertBox";
 import { useLocale } from "../context/LocaleContext";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const { locale } = useLocale();
@@ -34,7 +35,7 @@ export default function Home() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Failed to load products. Please try again later."
+        "Failed to load products. Please try again later."
       );
     } finally {
       setLoading(false);
@@ -112,32 +113,44 @@ export default function Home() {
       </section>
 
       {/* 🧩 Featured Categories */}
-      <section className="categories py-5">
+      <section className="categories py-5 bg-light">
         <div className="container">
-          <h3 className="text-center mb-4 fw-bold">Explore Categories</h3>
+          <h3 className="text-center mb-4 fw-bold text-uppercase">
+            Explore Categories
+          </h3>
           <div className="row g-4 justify-content-center">
-            {catalogs.slice(0, 4).map((cat) => (
-              <div key={cat.id} className="col-6 col-md-3 text-center">
-                <div className="category-card p-3 border rounded-3 shadow-sm hover-shadow transition">
-                  <div
-                    className="rounded-circle mx-auto mb-3"
-                    style={{
-                      width: "120px",
-                      height: "120px",
-                      backgroundImage: `url(${
-                        cat.image || "/img/categories/default.jpg"
-                      })`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  ></div>
-                  <h6 className="text-capitalize">{cat.name}</h6>
+            {catalogs.slice(0, 4).map((cat) => {
+              const baseURL = String(API.BASE || "http://meetify.uz/api").replace("/api", "");
+              const image =
+                cat.images?.[0]?.url
+                  ? `${baseURL}/storage/${cat.images[0].url}`
+                  : "https://via.placeholder.com/300x300?text=No+Image";
+
+              return (
+                <div key={cat.id} className="col-6 col-md-3 text-center">
+                  <div className="category-card p-3 rounded-4 shadow-sm bg-white h-100 hover-shadow transition">
+                    <Link to={`/products?catalog_id=${cat.id}`} className="text-decoration-none text-dark">
+                      <div
+                        className="rounded-circle mx-auto mb-3 border"
+                        style={{
+                          width: "130px",
+                          height: "130px",
+                          backgroundImage: `url(${image})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          transition: "all 0.3s ease",
+                        }}
+                      ></div>
+                      <h6 className="fw-semibold text-uppercase mt-3">{cat.name}</h6>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
+
 
       {/* 🤖 AI Recommended Products */}
       {recommended.length > 0 && (
@@ -188,15 +201,16 @@ export default function Home() {
 
           {!initialLoad && !error && products.length > 0 && (
             <>
-              <div className="row g-4 justify-content-center">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="col-sm-6 col-md-4 col-lg-3 d-flex"
-                  >
-                    <ProductCard product={product} />
-                  </div>
-                ))}
+              <div className="row g-5">
+                {products.length > 0 ? (
+                  products.map((p) => (
+                    <div key={p.id} className="col-lg-4 col-md-6 col-sm-6">
+                      <ProductCard product={p} />
+                    </div>
+                  ))
+                ) : (
+                  <p>No products found.</p>
+                )}
               </div>
 
               {pagination &&

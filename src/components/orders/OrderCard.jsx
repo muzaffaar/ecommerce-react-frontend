@@ -1,134 +1,147 @@
-import { useState } from "react";
+import PropTypes from "prop-types";
+import {
+  FiClock,
+  FiCreditCard,
+  FiTruck,
+  FiCheckCircle,
+  FiXCircle,
+  FiMapPin,
+  FiBox,
+} from "react-icons/fi";
 
 export default function OrderCard({ order }) {
-  const [open, setOpen] = useState(false);
+  const steps = [
+    { key: "pending", label: "Pending", icon: <FiClock /> },
+    { key: "paid", label: "Paid", icon: <FiCreditCard /> },
+    { key: "shipped", label: "Shipped", icon: <FiTruck /> },
+    { key: "completed", label: "Completed", icon: <FiCheckCircle /> },
+    { key: "cancelled", label: "Cancelled", icon: <FiXCircle /> },
+  ];
+
+  const status = String(order.status).toLowerCase();
+  const currentIndex = steps.findIndex((s) => s.key === status);
+  const cancelled = status === "cancelled";
 
   return (
-    <div className="order-card mb-4 border rounded shadow-sm overflow-hidden">
+    <div className="modern-order-card">
       {/* Header */}
-      <div
-        className="order-header d-flex justify-content-between align-items-center px-4 py-3"
-        style={{
-          backgroundColor: "#111",
-          color: "#fff",
-          cursor: "pointer",
-        }}
-        onClick={() => setOpen((prev) => !prev)}
-      >
-        <div>
-          <strong>Order #{order.id}</strong>
-          <span className="badge ms-3 text-uppercase"
-            style={{
-              backgroundColor:
-                order.status === "completed"
-                  ? "#28a745"
-                  : order.status === "pending"
-                  ? "#ffc107"
-                  : order.status === "shipped"
-                  ? "#17a2b8"
-                  : "#6c757d",
-              color:
-                order.status === "pending" || order.status === "shipped"
-                  ? "#000"
-                  : "#fff",
-            }}
-          >
-            {order.status}
-          </span>
-        </div>
+      <div className="order-header">
+        <h5>Order #{order.id}</h5>
+        <span
+          className={`status-badge ${
+            status === "completed"
+              ? "completed"
+              : status === "cancelled"
+              ? "cancelled"
+              : "in-progress"
+          }`}
+        >
+          {order.status.toUpperCase()}
+        </span>
+      </div>
 
-        <div className="text-end">
-          <span className="fw-semibold">${Number(order.total_price).toFixed(2)}</span>
-          <div className="small text-light">
-            {new Date(order.created_at).toLocaleDateString()}
-          </div>
+      {/* Timeline */}
+      <div className={`icon-timeline ${cancelled ? "cancelled" : ""}`}>
+        <div className="timeline-track"></div>
+
+        <div className="timeline-steps">
+          {steps.map((step, index) => {
+            const isDone = index <= currentIndex && !cancelled;
+            const isCurrent = index === currentIndex && !cancelled;
+
+            return (
+              <div
+                key={step.key}
+                className={`timeline-step ${isDone ? "done" : ""} ${
+                  isCurrent ? "current" : ""
+                } ${cancelled ? "cancelled" : ""}`}
+              >
+                <div className="icon-container">{step.icon}</div>
+                <small>{step.label}</small>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Body */}
-      <div
-        className={`order-body px-4 py-3 bg-white ${
-          open ? "d-block" : "d-none"
-        }`}
-      >
-        {/* 🧾 Items */}
-        {order.items && order.items.length > 0 ? (
-          <>
-            <h6 className="fw-bold mb-3 text-uppercase text-secondary">
-              Items
-            </h6>
-            <div className="list-group border-0">
-              {order.items.map((item) => (
-                <div
-                  key={item.id}
-                  className="list-group-item border-0 border-bottom py-3 px-0 d-flex justify-content-between align-items-start"
-                >
-                  <div className="d-flex align-items-start">
-                    {/* 🖼️ Product image */}
-                    {item.product?.image && (
-                      <img
-                        src={item.product.image}
-                        alt={item.product.name}
-                        className="me-3 rounded"
-                        style={{ width: "60px", height: "60px", objectFit: "cover" }}
-                      />
-                    )}
+      {/* Details */}
+      <div className="order-details">
+        <p>
+          <strong>Date:</strong>{" "}
+          {new Date(order.created_at).toLocaleDateString()}
+        </p>
+        <p>
+          <strong>Total:</strong> ${parseFloat(order.total_price || 0).toFixed(2)}
+        </p>
 
-                    <div>
-                      <div className="fw-semibold text-capitalize">
-                        {item.product?.name || "Unnamed Product"}
-                      </div>
-                      <div className="text-muted small">
-                        Qty: {item.quantity} × ${Number(item.price).toFixed(2)}
-                      </div>
-
-                      {/* 🎨 Variations */}
-                      {item.variations && item.variations.length > 0 && (
-                        <div className="mt-1 small">
-                          {item.variations.map((v) => (
-                            <span
-                              key={v.id}
-                              className="badge bg-light text-dark me-1 border"
-                              style={{
-                                borderColor: v.color_code || "#ccc",
-                              }}
-                            >
-                              {v.value}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="text-end fw-semibold text-primary">
-                    ${Number(item.price * item.quantity).toFixed(2)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <p className="text-muted mb-3">No items in this order.</p>
-        )}
-
-        {/* 🚚 Shipping */}
+        {/* Shipping */}
         {order.shipping_address && (
-          <div className="mt-3 p-3 border rounded bg-light">
-            <h6 className="fw-bold text-uppercase text-secondary mb-2">
-              Shipping Address
-            </h6>
-            <div className="small">
-              <strong>{order.shipping_address.recipient_name}</strong>
-              <br />
-              {order.shipping_address.address_line}, {order.shipping_address.city},{" "}
-              {order.shipping_address.postal_code}, {order.shipping_address.country}
-              <br />
-              <span className="text-muted">{order.shipping_address.phone}</span>
-            </div>
+          <div className="mt-3">
+            <p className="mb-1 fw-semibold">
+              <FiMapPin className="me-1 text-danger" /> Shipping Address:
+            </p>
+            <p className="small mb-0 text-muted">
+              {order.shipping_address.recipient_name},{" "}
+              {order.shipping_address.address_line},{" "}
+              {order.shipping_address.city}, {order.shipping_address.country}{" "}
+              ({order.shipping_address.postal_code})
+            </p>
+            <p className="small text-muted">
+              📞 {order.shipping_address.phone}
+            </p>
           </div>
         )}
+
+        {/* Items */}
+        <div className="mt-3">
+          <p className="fw-semibold d-flex align-items-center gap-1 mb-2">
+            <FiBox className="text-primary" /> Items:
+          </p>
+          <ul className="order-items">
+            {order.items?.map((item, i) => {
+              const product = item.product || {};
+              const variation =
+                item.variations && item.variations.length > 0
+                  ? item.variations[0]
+                  : null;
+
+              return (
+                <li key={i} className="border-bottom pb-2 mb-2">
+                  <span className="fw-semibold">{product.name}</span>
+                  {variation && (
+                    <>
+                      {" "}
+                      <span className="badge bg-light text-dark ms-2">
+                        {variation.value}
+                      </span>
+                      {variation.color_code && (
+                        <span
+                          className="ms-1"
+                          style={{
+                            display: "inline-block",
+                            width: "12px",
+                            height: "12px",
+                            borderRadius: "50%",
+                            backgroundColor: variation.color_code,
+                            border: "1px solid #ccc",
+                          }}
+                        ></span>
+                      )}
+                    </>
+                  )}
+                  <div className="small text-muted">
+                    Quantity: {item.quantity} × ${item.price}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   );
 }
+
+OrderCard.propTypes = {
+  order: PropTypes.object.isRequired,
+};
