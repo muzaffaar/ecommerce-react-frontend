@@ -153,33 +153,89 @@
         "cart_load_failed": "Nem sikerült betölteni a kosarat. Próbálja újra később."
     },
     "footer": {
-    "about_text": "Az ügyfél áll üzleti modellünk középpontjában, amely a dizájnt és a minőséget foglalja magában.",
-    "shopping": "Vásárlás",
-    "clothing_store": "Ruházati bolt",
-    "trending_shoes": "Divatos cipők",
-    "accessories": "Kiegészítők",
-    "sale": "Akció",
-    "help_support": "Segítség és támogatás",
-    "contact": "Kapcsolat",
-    "payment_methods": "Fizetési módok",
-    "delivery": "Kézbesítés",
-    "returns": "Visszaküldés és csere",
-    "newsletter": "Hírlevél",
-    "newsletter_text": "Legyen az első, aki értesül az új kollekciókról, akciókról és kedvezményekről!",
-    "email_placeholder": "Az Ön e-mail címe",
-    "subscribed": "✅ Sikeres feliratkozás!",
-    "copyright": "Szerzői jog © {{year}}. Minden jog fenntartva."
-  },
-  "productdetail": {
-    "title": "Termék részletei",
-    "not_found": "A termék nem található vagy szerverhiba történt.",
-    "add_failed": "Nem sikerült a terméket a kosárhoz adni.",
-    "added_to_cart": "A termék a kosárhoz lett adva!",
-    "add_button": "🛒 Kosárba helyezés",
-    "added_button": "✅ Kosárban",
-    "availability": "Elérhetőség:",
-    "in_stock": "Raktáron",
-    "category": "Kategória:",
-    "tags": "Címkék:"
-  }
+        "about_text": "Az ügyfél áll üzleti modellünk középpontjában, amely a dizájnt és a minőséget foglalja magában.",
+        "shopping": "Vásárlás",
+        "clothing_store": "Ruházati bolt",
+        "trending_shoes": "Divatos cipők",
+        "accessories": "Kiegészítők",
+        "sale": "Akció",
+        "help_support": "Segítség és támogatás",
+        "contact": "Kapcsolat",
+        "payment_methods": "Fizetési módok",
+        "delivery": "Kézbesítés",
+        "returns": "Visszaküldés és csere",
+        "newsletter": "Hírlevél",
+        "newsletter_text": "Legyen az első, aki értesül az új kollekciókról, akciókról és kedvezményekről!",
+        "email_placeholder": "Az Ön e-mail címe",
+        "subscribed": "✅ Sikeres feliratkozás!",
+        "copyright": "Szerzői jog © {{year}}. Minden jog fenntartva."
+    },
+    "productdetail": {
+        "title": "Termék részletei",
+        "not_found": "A termék nem található vagy szerverhiba történt.",
+        "add_failed": "Nem sikerült a terméket a kosárhoz adni.",
+        "added_to_cart": "A termék a kosárhoz lett adva!",
+        "add_button": "🛒 Kosárba helyezés",
+        "added_button": "✅ Kosárban",
+        "availability": "Elérhetőség:",
+        "in_stock": "Raktáron",
+        "category": "Kategória:",
+        "tags": "Címkék:"
+    },
+    "forgot": {
+        "title": "Elfelejtett jelszó",
+        "email": "E-mail cím",
+        "button": "Visszaállítási link küldése",
+        "processing": "Küldés...",
+        "success": "A jelszó-visszaállító linket elküldtük az e-mail címére.",
+        "failed": "Nem sikerült elküldeni a linket. Próbáld újra."
+    },
+    "reset": {
+        "title": "Jelszó visszaállítása",
+        "new_password": "Új jelszó",
+        "confirm_password": "Jelszó megerősítése",
+        "button": "Jelszó visszaállítása",
+        "processing": "Feldolgozás...",
+        "success": "A jelszót sikeresen visszaállítottuk.",
+        "failed": "Nem sikerült visszaállítani a jelszót."
+    },
+    "verify": {
+        "title": "E-mail megerősítés szükséges",
+        "description": "Kérjük, erősítsd meg az e-mail címedet a folytatáshoz. Ellenőrizd a bejövő leveleidet.",
+        "button": "Megerősítő e-mail újraküldése",
+        "processing": "Küldés...",
+        "resent_inbox": "Az e-mail újraküldve a postaládádba.",
+        "resent": "Az e-mail újraküldve.",
+        "failed": "Nem sikerült újraküldeni az e-mailt. Próbáld újra később."
+    },
+    "auth": {
+        "title": "Bejelentkezés"
+    },
+    "login": {
+        "title": "Bejelentkezés",
+        "heading": "Jelentkezz be fiókodba",
+        "email": "E-mail",
+        "email_placeholder": "Add meg az e-mailed",
+        "password": "Jelszó",
+        "button": "Bejelentkezés",
+        "forgot": "Elfelejtetted a jelszót?",
+        "create": "Fiók létrehozása",
+        "success": "Sikeres bejelentkezés.",
+        "failed": "Sikertelen bejelentkezés. Ellenőrizd az adatokat."
+    },
+    "register": {
+        "title": "Regisztráció",
+        "heading": "Fiók létrehozása",
+        "name": "Teljes név",
+        "name_placeholder": "Add meg a teljes neved",
+        "email": "E-mail",
+        "email_placeholder": "Add meg az e-mail címed",
+        "password": "Jelszó",
+        "confirm_password": "Jelszó megerősítése",
+        "button": "Regisztráció",
+        "have_account": "Már van fiókod?",
+        "login_here": "Jelentkezz be itt",
+        "success": "Sikeres regisztráció!",
+        "failed": "A regisztráció nem sikerült. Ellenőrizd az adatokat."
+    }
 }

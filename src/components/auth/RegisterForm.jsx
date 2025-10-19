@@ -1,10 +1,16 @@
+// src/pages/auth/Register.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../services/api";
 import { API } from "../../constants/api";
 import AlertBox from "../../components/common/AlertBox";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
+  const { t, i18n } = useTranslation();
+  const locale = localStorage.getItem("locale") || "en";
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,14 +23,12 @@ export default function Register() {
   const [type, setType] = useState("info");
   const [returnUrl, setReturnUrl] = useState(null);
 
-  const locale = localStorage.getItem("locale") || "en";
-  const navigate = useNavigate();
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
 
   const handleChange = (e) =>
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,8 +39,7 @@ export default function Register() {
 
     try {
       const res = await api.post(API.AUTH.REGISTER(locale), formData);
-
-      setMessage(res.data.message);
+      setMessage(res.data.message || t("register.success"));
       setType("success");
 
       if (res.data.token) localStorage.setItem("token", res.data.token);
@@ -46,7 +49,7 @@ export default function Register() {
         const backendMsg =
           err.response.data?.message ||
           Object.values(err.response.data?.errors || {}).flat().join("\n");
-        setMessage(backendMsg);
+        setMessage(backendMsg || t("register.failed"));
         setType("danger");
       }
     } finally {
@@ -67,10 +70,10 @@ export default function Register() {
       <section className="breadcrumb-option">
         <div className="container">
           <div className="breadcrumb__text">
-            <h4>Register</h4>
+            <h4>{t("register.title")}</h4>
             <div className="breadcrumb__links">
-              <Link to="/">Home</Link>
-              <span>Auth</span>
+              <Link to="/">{t("home")}</Link>
+              <span>{t("auth.title")}</span>
             </div>
           </div>
         </div>
@@ -80,23 +83,21 @@ export default function Register() {
       <section className="checkout spad">
         <div className="container">
           <div className="row justify-content-center">
-            {/* Register */}
             <div className="col-lg-6">
               <div className="checkout__form">
-                <h4>Create Account</h4>
+                <h4>{t("register.heading")}</h4>
 
-                {/* Alert */}
                 <AlertBox type={type} message={message} />
 
                 <form onSubmit={handleSubmit}>
                   <div className="checkout__input">
                     <p>
-                      Full Name<span>*</span>
+                      {t("register.name")}<span>*</span>
                     </p>
                     <input
                       type="text"
                       name="name"
-                      placeholder="Your full name"
+                      placeholder={t("register.name_placeholder")}
                       value={formData.name}
                       onChange={handleChange}
                       required
@@ -105,12 +106,12 @@ export default function Register() {
 
                   <div className="checkout__input">
                     <p>
-                      Email<span>*</span>
+                      {t("register.email")}<span>*</span>
                     </p>
                     <input
                       type="email"
                       name="email"
-                      placeholder="Your email address"
+                      placeholder={t("register.email_placeholder")}
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -119,7 +120,7 @@ export default function Register() {
 
                   <div className="checkout__input">
                     <p>
-                      Password<span>*</span>
+                      {t("register.password")}<span>*</span>
                     </p>
                     <input
                       type="password"
@@ -133,7 +134,7 @@ export default function Register() {
 
                   <div className="checkout__input">
                     <p>
-                      Confirm Password<span>*</span>
+                      {t("register.confirm_password")}<span>*</span>
                     </p>
                     <input
                       type="password"
@@ -146,15 +147,15 @@ export default function Register() {
                   </div>
 
                   <button type="submit" className="site-btn" disabled={loading}>
-                    {loading ? "..." : "Register"}
+                    {loading ? "..." : t("register.button")}
                   </button>
                 </form>
 
                 <div className="mt-3">
                   <p>
-                    Already have an account?{" "}
+                    {t("register.have_account")}{" "}
                     <Link to="/login" className="text-decoration-none">
-                      Login here
+                      {t("register.login_here")}
                     </Link>
                   </p>
                 </div>

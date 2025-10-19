@@ -25,16 +25,33 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// ✅ Optional: auto-remove invalid guest token
+// ✅ Response interceptors for guest token + email verification
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      if (localStorage.getItem("guest_token")) {
-        console.warn("⚠️ Guest token expired — removing");
-        localStorage.removeItem("guest_token");
-      }
+    const res = error.response;
+
+    // ⚠️ Auto-remove expired guest token
+    if (res?.status === 401 && localStorage.getItem("guest_token")) {
+      console.warn("⚠️ Guest token expired — removing");
+      localStorage.removeItem("guest_token");
     }
+
+    // 🚫 Handle email not verified (localization-safe)
+    if (res?.status === 403 && res.data?.code === "EMAIL_NOT_VERIFIED") {
+      // Store verification notice temporarily
+      localStorage.setItem(
+        "verify_notice",
+        JSON.stringify({
+          message: res.data.message,
+          resend_url: res.data.resend_url,
+        })
+      );
+
+      // Redirect to verify notice page
+      window.location.href = "/verify-notice";
+    }
+
     return Promise.reject(error);
   }
 );

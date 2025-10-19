@@ -181,5 +181,61 @@
         "in_stock": "Mavjud",
         "category": "Kategoriya:",
         "tags": "Teglar:"
+    },
+    "forgot": {
+        "title": "Parolni unutdingizmi",
+        "email": "Elektron pochta manzili",
+        "button": "Parolni tiklash havolasini yuborish",
+        "processing": "Yuborilmoqda...",
+        "success": "Parolni tiklash havolasi emailingizga yuborildi.",
+        "failed": "Havolani yuborib bo‘lmadi. Qayta urinib ko‘ring."
+    },
+    "reset": {
+        "title": "Parolni tiklash",
+        "new_password": "Yangi parol",
+        "confirm_password": "Parolni tasdiqlang",
+        "button": "Parolni tiklash",
+        "processing": "Tiklanmoqda...",
+        "success": "Parol muvaffaqiyatli tiklandi.",
+        "failed": "Parolni tiklab bo‘lmadi."
+    },
+    "verify": {
+        "title": "Elektron pochta tasdiqlanishi kerak",
+        "description": "Davom etishdan oldin elektron pochtangizni tasdiqlang. Pochtangizni tekshiring.",
+        "button": "Tasdiqlash xatini qayta yuborish",
+        "processing": "Yuborilmoqda...",
+        "resent_inbox": "Tasdiqlash xati qayta yuborildi.",
+        "resent": "Tasdiqlash xati yuborildi.",
+        "failed": "Tasdiqlash xatini yuborishda xatolik. Keyinroq urinib ko‘ring."
+    },
+    "auth": {
+        "title": "Kirish"
+    },
+    "login": {
+        "title": "Tizimga kirish",
+        "heading": "Hisobingizga kiring",
+        "email": "Elektron pochta",
+        "email_placeholder": "Emailingizni kiriting",
+        "password": "Parol",
+        "button": "Kirish",
+        "forgot": "Parolni unutdingizmi?",
+        "create": "Hisob yaratish",
+        "success": "Muvaffaqiyatli tizimga kirdingiz.",
+        "failed": "Kirishda xatolik. Ma’lumotlarni tekshiring."
+    },
+    "register": {
+        "title": "Ro‘yxatdan o‘tish",
+        "heading": "Hisob yarating",
+        "name": "To‘liq ism",
+        "name_placeholder": "To‘liq ismingizni kiriting",
+        "email": "Elektron pochta",
+        "email_placeholder": "Email manzilingizni kiriting",
+        "password": "Parol",
+        "confirm_password": "Parolni tasdiqlang",
+        "button": "Ro‘yxatdan o‘tish",
+        "have_account": "Hisobingiz bormi?",
+        "login_here": "Bu yerda kiring",
+        "success": "Ro‘yxatdan o‘tish muvaffaqiyatli amalga oshirildi!",
+        "failed": "Ro‘yxatdan o‘tishda xatolik yuz berdi."
     }
 }

@@ -180,5 +180,59 @@
     "in_stock": "In Stock",
     "category": "Category:",
     "tags": "Tags:"
+  },
+  "forgot": {
+    "title": "Forgot Password",
+    "email": "Email address",
+    "button": "Send Reset Link",
+    "processing": "Sending...",
+    "success": "Password reset link sent to your email.",
+    "failed": "Unable to send reset link. Try again."
+  },
+  "reset": {
+    "title": "Reset Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password",
+    "button": "Reset Password",
+    "processing": "Resetting...",
+    "success": "Password has been reset successfully.",
+    "failed": "Failed to reset password."
+  },
+  "verify": {
+    "title": "Email Verification Required",
+    "description": "Please verify your email address before continuing. Check your inbox for a verification link.",
+    "button": "Resend Verification Email",
+    "processing": "Sending...",
+    "resent_inbox": "Verification email has been resent to your inbox.",
+    "resent": "Verification email has been resent.",
+    "failed": "Failed to resend verification email. Try again later."
+  },
+  "auth": { "title": "Auth" },
+  "login": {
+    "title": "Login",
+    "heading": "Login to Your Account",
+    "email": "Email",
+    "email_placeholder": "Enter your email",
+    "password": "Password",
+    "button": "Login",
+    "forgot": "Forgot password?",
+    "create": "Create account",
+    "success": "Logged in successfully.",
+    "failed": "Login failed. Check your credentials."
+  },
+  "register": {
+    "title": "Register",
+    "heading": "Create Account",
+    "name": "Full Name",
+    "name_placeholder": "Your full name",
+    "email": "Email",
+    "email_placeholder": "Your email address",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "button": "Register",
+    "have_account": "Already have an account?",
+    "login_here": "Login here",
+    "success": "Registration successful!",
+    "failed": "Registration failed. Please check your details."
   }
 }
