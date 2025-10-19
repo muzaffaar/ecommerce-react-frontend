@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 export default function Register() {
   const { t, i18n } = useTranslation();
-  const locale = localStorage.getItem("locale") || "en";
+  const locale = localStorage.getItem("lang") || "en";
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({

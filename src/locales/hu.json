@@ -212,17 +212,21 @@
         "title": "Bejelentkezés"
     },
     "login": {
-        "title": "Bejelentkezés",
-        "heading": "Jelentkezz be fiókodba",
-        "email": "E-mail",
-        "email_placeholder": "Add meg az e-mailed",
-        "password": "Jelszó",
-        "button": "Bejelentkezés",
-        "forgot": "Elfelejtetted a jelszót?",
-        "create": "Fiók létrehozása",
-        "success": "Sikeres bejelentkezés.",
-        "failed": "Sikertelen bejelentkezés. Ellenőrizd az adatokat."
-    },
+    "title": "Bejelentkezés",
+    "heading": "Lépj be a fiókodba",
+    "email": "E-mail",
+    "email_placeholder": "Add meg az e-mail címed",
+    "password": "Jelszó",
+    "button": "Bejelentkezés",
+    "processing": "Bejelentkezés...",
+    "or": "vagy",
+    "google": "Folytatás Google-lel",
+    "google_failed": "Nem sikerült elindítani a Google bejelentkezést.",
+    "forgot": "Elfelejtetted a jelszót?",
+    "create": "Fiók létrehozása",
+    "success": "Sikeresen bejelentkeztél.",
+    "failed": "Sikertelen bejelentkezés. Ellenőrizd az adataidat."
+  },
     "registerpage": {
         "title": "Regisztráció",
         "heading": "Fiók létrehozása",

@@ -1,21 +1,25 @@
+// src/pages/Login.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 import { API } from "../constants/api";
 import AlertBox from "../components/common/AlertBox";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const { t, i18n } = useTranslation();
+  const locale = localStorage.getItem("lang") || "en";
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState("info");
   const [redirectPath, setRedirectPath] = useState(null);
 
-  const locale = localStorage.getItem("locale") || "en";
-  const navigate = useNavigate();
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -29,18 +33,17 @@ export default function Login() {
 
     try {
       const res = await api.post(API.AUTH.LOGIN(locale), formData);
-      setMessage(res.data.message);
+      setMessage(res.data.message || t("login.success"));
       setType("success");
 
       if (res.data.token) localStorage.setItem("token", res.data.token);
-
       const path = res.data.returnUrl || "/";
       setRedirectPath(path);
     } catch (err) {
       const backendMsg =
         err.response?.data?.message ||
         Object.values(err.response?.data?.errors || {}).flat().join("\n");
-      setMessage(backendMsg || "Login failed.");
+      setMessage(backendMsg || t("login.failed"));
       setType("danger");
     } finally {
       setLoading(false);
@@ -49,17 +52,14 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     try {
-      // 🔹 Call backend redirect endpoint
       const res = await api.get(API.AUTH.GOOGLE_REDIRECT);
       if (res.data?.url) {
-        // Redirect user to Google login
         window.location.href = res.data.url;
       } else {
-        // If API returns redirect directly (302), fallback to full URL
-        window.location.href = `${API.AUTH.GOOGLE_REDIRECT}`;
+        window.location.href = API.AUTH.GOOGLE_REDIRECT;
       }
     } catch {
-      setMessage("Failed to start Google login.");
+      setMessage(t("login.google_failed"));
       setType("danger");
     }
   };
@@ -77,9 +77,9 @@ export default function Login() {
       <section className="breadcrumb-option bg-light py-4">
         <div className="container">
           <div className="breadcrumb__text">
-            <h4 className="fw-bold">Login</h4>
+            <h4 className="fw-bold">{t("login.title")}</h4>
             <div className="breadcrumb__links">
-              <Link to="/">Home</Link> <span>Auth</span>
+              <Link to="/">{t("home")}</Link> <span>{t("auth.title")}</span>
             </div>
           </div>
         </div>
@@ -91,18 +91,20 @@ export default function Login() {
           <div className="row justify-content-center">
             <div className="col-lg-6">
               <div className="checkout__form card border-0 shadow-sm p-4 rounded-4">
-                <h4 className="fw-bold mb-4">Login to Your Account</h4>
+                <h4 className="fw-bold mb-4">{t("login.heading")}</h4>
 
                 <AlertBox type={type} message={message} />
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Email</label>
+                    <label className="form-label fw-semibold">
+                      {t("login.email")}
+                    </label>
                     <input
                       type="email"
                       name="email"
                       className="form-control rounded-3"
-                      placeholder="Enter your email"
+                      placeholder={t("login.email_placeholder")}
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -110,7 +112,9 @@ export default function Login() {
                   </div>
 
                   <div className="mb-4">
-                    <label className="form-label fw-semibold">Password</label>
+                    <label className="form-label fw-semibold">
+                      {t("login.password")}
+                    </label>
                     <input
                       type="password"
                       name="password"
@@ -127,14 +131,12 @@ export default function Login() {
                     className="btn btn-dark w-100 py-2 fw-semibold rounded-3"
                     disabled={loading}
                   >
-                    {loading ? "Signing in..." : "Login"}
+                    {loading ? t("login.processing") : t("login.button")}
                   </button>
                 </form>
 
                 {/* Divider */}
-                <div className="text-center my-3 text-muted small">
-                  ─── or ───
-                </div>
+                <div className="text-center my-3 text-muted small">─── {t("login.or")} ───</div>
 
                 {/* 🔵 Google Login Button */}
                 <button
@@ -147,20 +149,17 @@ export default function Login() {
                     width="20"
                     height="20"
                   />
-                  Continue with Google
+                  {t("login.google")}
                 </button>
 
                 {/* Links */}
                 <div className="text-center mt-4">
-                  <Link
-                    to="/forgot-password"
-                    className="text-decoration-none me-2"
-                  >
-                    Forgot password?
+                  <Link to="/forgot-password" className="text-decoration-none me-2">
+                    {t("login.forgot")}
                   </Link>
                   <span className="text-muted">·</span>
                   <Link to="/register" className="text-decoration-none ms-2">
-                    Create account
+                    {t("login.create")}
                   </Link>
                 </div>
               </div>

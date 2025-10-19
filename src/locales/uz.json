@@ -212,16 +212,20 @@
         "title": "Kirish"
     },
     "login": {
-        "title": "Tizimga kirish",
-        "heading": "Hisobingizga kiring",
-        "email": "Elektron pochta",
-        "email_placeholder": "Emailingizni kiriting",
-        "password": "Parol",
-        "button": "Kirish",
-        "forgot": "Parolni unutdingizmi?",
-        "create": "Hisob yaratish",
-        "success": "Muvaffaqiyatli tizimga kirdingiz.",
-        "failed": "Kirishda xatolik. Ma’lumotlarni tekshiring."
+        "title": "Kirish",
+    "heading": "Hisobingizga kiring",
+    "email": "Elektron pochta",
+    "email_placeholder": "Email manzilingizni kiriting",
+    "password": "Parol",
+    "button": "Kirish",
+    "processing": "Kirilmoqda...",
+    "or": "yoki",
+    "google": "Google orqali kirish",
+    "google_failed": "Google orqali kirishni boshlashda xatolik yuz berdi.",
+    "forgot": "Parolni unutdingizmi?",
+    "create": "Hisob yaratish",
+    "success": "Muvaffaqiyatli tizimga kirdingiz.",
+    "failed": "Kirishda xatolik. Ma’lumotlarni tekshiring."
     },
     "registerpage": {
         "title": "Ro‘yxatdan o‘tish",

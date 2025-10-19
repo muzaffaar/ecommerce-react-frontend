@@ -209,16 +209,20 @@
   },
   "auth": { "title": "Auth" },
   "login": {
-    "title": "Login",
+   "title": "Login",
     "heading": "Login to Your Account",
     "email": "Email",
     "email_placeholder": "Enter your email",
     "password": "Password",
     "button": "Login",
+    "processing": "Signing in...",
+    "or": "or",
+    "google": "Continue with Google",
+    "google_failed": "Failed to start Google login.",
     "forgot": "Forgot password?",
     "create": "Create account",
     "success": "Logged in successfully.",
-    "failed": "Login failed. Check your credentials."
+    "failed": "Login failed. Please check your credentials."
   },
   "registerpage": {
     "title": "Register",
