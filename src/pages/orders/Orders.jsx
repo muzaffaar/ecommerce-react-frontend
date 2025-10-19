@@ -4,7 +4,7 @@ import { API } from "../../constants/api";
 import AlertBox from "../../components/common/AlertBox";
 import OrderCard from "../../components/orders/OrderCard";
 import { FiClock, FiCheckCircle } from "react-icons/fi";
-import { useTranslation } from "react-i18next"; // ✅ Import translation hook
+import { useTranslation } from "react-i18next";
 
 export default function Orders() {
   const { t, i18n } = useTranslation();
@@ -16,17 +16,27 @@ export default function Orders() {
   const locale = localStorage.getItem("locale") || "en";
   const token = localStorage.getItem("token");
 
+  // ✅ Switch language once when locale changes
   useEffect(() => {
     i18n.changeLanguage(locale);
+  }, [locale, i18n]);
 
+  // ✅ Fetch orders only when locale or token changes
+  useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
       setMessage("");
       try {
-        const res = await api.get(API.ORDER.LIST(locale),
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+        if (!token) {
+          setMessage(t("errors.not_logged_in"));
+          setType("danger");
+          return;
+        }
+
+        const res = await api.get(API.ORDER.LIST(locale), {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
         setOrders(res.data.orders || []);
         setType("success");
       } catch (err) {
@@ -44,8 +54,9 @@ export default function Orders() {
         setLoading(false);
       }
     };
+
     fetchOrders();
-  }, [locale, token, i18n, t]);
+  }, [locale, token]); // ❗ removed i18n & t to prevent infinite loop
 
   const completedStatuses = ["completed", "delivered", "finished"];
   const completedOrders = orders.filter((o) =>
@@ -57,7 +68,7 @@ export default function Orders() {
 
   return (
     <>
-      {/* Breadcrumb */}
+      {/* 🧭 Breadcrumb */}
       <section className="breadcrumb-option">
         <div className="container">
           <div className="row">
@@ -74,8 +85,9 @@ export default function Orders() {
         </div>
       </section>
 
+      {/* 🧾 Orders List */}
       <div className="container py-5">
-        <AlertBox type={type} message={message} />
+        {message && <AlertBox type={type} message={message} />}
 
         {loading && <p>{t("orderpage.loading")}</p>}
 
