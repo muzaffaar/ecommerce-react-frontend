@@ -39,7 +39,7 @@ export default function Register() {
 
     try {
       const res = await api.post(API.AUTH.REGISTER(locale), formData);
-      setMessage(res.data.message || t("register.success"));
+      setMessage(res.data.message || t("registerpage.success"));
       setType("success");
 
       if (res.data.token) localStorage.setItem("token", res.data.token);
@@ -49,7 +49,7 @@ export default function Register() {
         const backendMsg =
           err.response.data?.message ||
           Object.values(err.response.data?.errors || {}).flat().join("\n");
-        setMessage(backendMsg || t("register.failed"));
+        setMessage(backendMsg || t("registerpage.failed"));
         setType("danger");
       }
     } finally {
@@ -85,19 +85,19 @@ export default function Register() {
           <div className="row justify-content-center">
             <div className="col-lg-6">
               <div className="checkout__form">
-                <h4>{t("register.heading")}</h4>
+                <h4>{t("registerpage.heading")}</h4>
 
                 <AlertBox type={type} message={message} />
 
                 <form onSubmit={handleSubmit}>
                   <div className="checkout__input">
                     <p>
-                      {t("register.name")}<span>*</span>
+                      {t("registerpage.name")}<span>*</span>
                     </p>
                     <input
                       type="text"
                       name="name"
-                      placeholder={t("register.name_placeholder")}
+                      placeholder={t("registerpage.name_placeholder")}
                       value={formData.name}
                       onChange={handleChange}
                       required
@@ -106,12 +106,12 @@ export default function Register() {
 
                   <div className="checkout__input">
                     <p>
-                      {t("register.email")}<span>*</span>
+                      {t("registerpage.email")}<span>*</span>
                     </p>
                     <input
                       type="email"
                       name="email"
-                      placeholder={t("register.email_placeholder")}
+                      placeholder={t("registerpage.email_placeholder")}
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -120,7 +120,7 @@ export default function Register() {
 
                   <div className="checkout__input">
                     <p>
-                      {t("register.password")}<span>*</span>
+                      {t("registerpage.password")}<span>*</span>
                     </p>
                     <input
                       type="password"
@@ -134,7 +134,7 @@ export default function Register() {
 
                   <div className="checkout__input">
                     <p>
-                      {t("register.confirm_password")}<span>*</span>
+                      {t("registerpage.confirm_password")}<span>*</span>
                     </p>
                     <input
                       type="password"
@@ -147,15 +147,15 @@ export default function Register() {
                   </div>
 
                   <button type="submit" className="site-btn" disabled={loading}>
-                    {loading ? "..." : t("register.button")}
+                    {loading ? "..." : t("registerpage.button")}
                   </button>
                 </form>
 
                 <div className="mt-3">
                   <p>
-                    {t("register.have_account")}{" "}
+                    {t("registerpage.have_account")}{" "}
                     <Link to="/login" className="text-decoration-none">
-                      {t("register.login_here")}
+                      {t("registerpage.login_here")}
                     </Link>
                   </p>
                 </div>

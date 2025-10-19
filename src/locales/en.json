@@ -220,7 +220,7 @@
     "success": "Logged in successfully.",
     "failed": "Login failed. Check your credentials."
   },
-  "register": {
+  "registerpage": {
     "title": "Register",
     "heading": "Create Account",
     "name": "Full Name",

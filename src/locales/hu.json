@@ -223,7 +223,7 @@
         "success": "Sikeres bejelentkezés.",
         "failed": "Sikertelen bejelentkezés. Ellenőrizd az adatokat."
     },
-    "register": {
+    "registerpage": {
         "title": "Regisztráció",
         "heading": "Fiók létrehozása",
         "name": "Teljes név",

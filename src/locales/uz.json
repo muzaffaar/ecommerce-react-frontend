@@ -223,7 +223,7 @@
         "success": "Muvaffaqiyatli tizimga kirdingiz.",
         "failed": "Kirishda xatolik. Ma’lumotlarni tekshiring."
     },
-    "register": {
+    "registerpage": {
         "title": "Ro‘yxatdan o‘tish",
         "heading": "Hisob yarating",
         "name": "To‘liq ism",
