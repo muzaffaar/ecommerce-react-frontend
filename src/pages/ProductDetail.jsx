@@ -7,7 +7,7 @@ import AlertBox from "../components/common/AlertBox";
 
 export default function ProductDetail() {
   const { slug } = useParams();
-  const locale = "en";
+  const locale = localStorage.getItem("lang") || "en";
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,6 +51,7 @@ export default function ProductDetail() {
       setLoading(true);
       try {
         const res = await api.get(API.PRODUCT.DETAIL(locale, slug));
+        console.log("Product detail response:", res);
         const prod = res.data?.product || res.data;
         setProduct(prod);
         if (prod.images?.length > 0) setActiveImage(prod.images[0]);
