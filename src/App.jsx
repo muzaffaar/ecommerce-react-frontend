@@ -16,6 +16,7 @@ import EmailVerified from "./pages/EmailVerified";
 import Orders from "./pages/orders/Orders";
 import Products from "./pages/Products";
 import Contact from "./pages/Contact";
+import GoogleCallback from "./pages/GoogleCallback";
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/email-verified" element={<EmailVerified />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/auth/google/callback" element={<GoogleCallback />} />
           <Route
             path="/cart"
             element={
