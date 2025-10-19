@@ -1,7 +1,7 @@
 // src/constants/api.js
 
 export const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://meetify.uz/api";
-
+export const STORAGE_BASE = import.meta.env.VITE_STORAGE_BASE_URL || "http://meetify.uz/storage";
 
 
 export const API = {
