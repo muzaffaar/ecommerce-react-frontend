@@ -47,7 +47,10 @@
         "clear": "Törlés"
     },
     "errors": {
-        "load_products_failed": "A termékek betöltése nem sikerült. Próbálja újra később."
+        "load_products_failed": "A termékek betöltése nem sikerült. Próbálja újra később.",
+        "load_catalogs_failed": "Nem sikerült betölteni a katalógusokat. Próbálja újra később.",
+        "load_orders_failed": "Nem sikerült betölteni a rendeléseket. Próbálja újra később.",
+        "load_cart_failed": "Nem sikerült betölteni a kosarat. Próbálja újra később."
     },
     "catalogpage": {
         "title": "Katalógusok",
@@ -61,18 +64,12 @@
         "prev": "Előző",
         "next": "Következő"
     },
-    "errors": {
-        "load_catalogs_failed": "Nem sikerült betölteni a katalógusokat. Próbálja újra később."
-    },
     "orderpage": {
         "title": "Rendelések",
         "loading": "Rendelései betöltése...",
         "no_orders": "Nem találhatók rendelések.",
         "active_orders": "Aktív / Függő rendelések",
         "completed_orders": "Befejezett rendelések"
-    },
-    "errors": {
-        "load_orders_failed": "Nem sikerült betölteni a rendeléseket. Próbálja újra később."
     },
     "ordercard": {
         "order": "Rendelés",
@@ -128,9 +125,6 @@
         "item_removed": "A termék eltávolítva a kosárból.",
         "delete_failed": "Nem sikerült eltávolítani a terméket."
     },
-    "errors": {
-        "load_cart_failed": "Nem sikerült betölteni a kosarat. Próbálja újra később."
-    },
     "checkoutpage": {
         "title": "Fizetés",
         "title_short": "Fizetés",
@@ -175,5 +169,17 @@
     "email_placeholder": "Az Ön e-mail címe",
     "subscribed": "✅ Sikeres feliratkozás!",
     "copyright": "Szerzői jog © {{year}}. Minden jog fenntartva."
+  },
+  "productdetail": {
+    "title": "Termék részletei",
+    "not_found": "A termék nem található vagy szerverhiba történt.",
+    "add_failed": "Nem sikerült a terméket a kosárhoz adni.",
+    "added_to_cart": "A termék a kosárhoz lett adva!",
+    "add_button": "🛒 Kosárba helyezés",
+    "added_button": "✅ Kosárban",
+    "availability": "Elérhetőség:",
+    "in_stock": "Raktáron",
+    "category": "Kategória:",
+    "tags": "Címkék:"
   }
 }

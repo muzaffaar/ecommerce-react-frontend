@@ -48,7 +48,8 @@
     },
     "errors": {
         "load_products_failed": "Failed to load products. Please try again later.",
-        "load_catalogs_failed": "Failed to fetch catalogs. Please try again later."
+        "load_catalogs_failed": "Failed to fetch catalogs. Please try again later.",
+        "load_cart_failed": "Failed to load cart. Please try again later."
     },
     "catalogpage": {
         "title": "Catalogs",
@@ -123,9 +124,6 @@
         "item_removed": "Item removed from cart.",
         "delete_failed": "Failed to delete item."
     },
-    "errors": {
-        "load_cart_failed": "Failed to load cart. Please try again later."
-    },
     "checkoutpage": {
         "title": "Checkout",
         "title_short": "Checkout",
@@ -170,5 +168,17 @@
     "email_placeholder": "Your email",
     "subscribed": "✅ Subscribed successfully!",
     "copyright": "Copyright © {{year}} All rights reserved."
+  },
+  "productdetail": {
+    "title": "Product Details",
+    "not_found": "Product not found or server error.",
+    "add_failed": "Failed to add to cart.",
+    "added_to_cart": "Product added to cart!",
+    "add_button": "🛒 Add to Cart",
+    "added_button": "✅ Added to Cart",
+    "availability": "Availability:",
+    "in_stock": "In Stock",
+    "category": "Category:",
+    "tags": "Tags:"
   }
 }

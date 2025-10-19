@@ -4,10 +4,13 @@ import api from "../services/api";
 import { API, API_BASE } from "../constants/api";
 import Loader from "../components/common/Loader";
 import AlertBox from "../components/common/AlertBox";
+import { useLocale } from "../context/LocaleContext";
+import { useTranslation } from "react-i18next";
 
 export default function ProductDetail() {
   const { slug } = useParams();
-  const locale = localStorage.getItem("lang") || "en";  
+  const { locale } = useLocale();
+  const { t, i18n } = useTranslation();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +22,11 @@ export default function ProductDetail() {
 
   const baseURL = String(API_BASE || "http://meetify.uz/api").replace("/api", "");
 
-  // 🕒 Auto-hide alerts
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
+
+  // Auto-hide alerts
   useEffect(() => {
     if (error || addedToCart) {
       const timer = setTimeout(() => {
@@ -30,7 +37,7 @@ export default function ProductDetail() {
     }
   }, [error, addedToCart]);
 
-  // 🔑 Ensure guest token
+  // Ensure guest token
   useEffect(() => {
     const ensureGuestToken = async () => {
       if (!localStorage.getItem("guest_token")) {
@@ -45,33 +52,31 @@ export default function ProductDetail() {
     ensureGuestToken();
   }, [locale]);
 
-  // 🛒 Fetch product
+  // Fetch product
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
         const res = await api.get(API.PRODUCT.DETAIL(locale, slug));
-        console.log("Product detail response:", res);
         const prod = res.data?.product || res.data;
         setProduct(prod);
         if (prod.images?.length > 0) setActiveImage(prod.images[0]);
         setFinalPrice(Number(prod.discounted_price || prod.price || 0));
       } catch {
-        setError("Product not found or server error.");
+        setError(t("productdetail.not_found"));
       } finally {
         setLoading(false);
       }
     };
     fetchProduct();
-  }, [locale, slug]);
+  }, [locale, slug, t]);
 
-  // 💰 Recalculate price dynamically
+  // Recalculate price
   const updatePrice = (updatedSelections) => {
     let base = Number(product.discounted_price || product.price || 0);
     let modifiers = 0;
 
     Object.values(updatedSelections).forEach((val) => {
-      // Prefer discounted_modifier if product has discount
       if (product.discounted_price && val.discounted_modifier)
         modifiers += Number(val.discounted_modifier || 0);
       else modifiers += Number(val.price_modifier || 0);
@@ -80,21 +85,18 @@ export default function ProductDetail() {
     setFinalPrice((base + modifiers).toFixed(2));
   };
 
-  // 🎨 Handle variation selection
+  // Variation selection
   const handleVariationClick = (variationName, val) => {
     setSelectedVariations((prev) => {
       const updated = { ...prev, [variationName]: val };
       updatePrice(updated);
-
-      // 🖼 Switch image when variation has its own images
       if (val.images?.length > 0) setActiveImage(val.images[0]);
       else if (product.images?.length > 0) setActiveImage(product.images[0]);
-
       return updated;
     });
   };
 
-  // 🛍 Add to Cart
+  // Add to cart
   const handleAddToCart = async () => {
     try {
       const variationValueIds = Object.values(selectedVariations).map((v) => v.id);
@@ -106,7 +108,7 @@ export default function ProductDetail() {
       setAddedToCart(true);
       window.dispatchEvent(new Event("cartUpdated"));
     } catch {
-      setError("Failed to add to cart.");
+      setError(t("productdetail.add_failed"));
     }
   };
 
@@ -114,7 +116,7 @@ export default function ProductDetail() {
   if (!product)
     return (
       <div className="container py-5">
-        <AlertBox type="info" message="Product not found." />
+        <AlertBox type="info" message={t("productdetail.not_found")} />
       </div>
     );
 
@@ -126,7 +128,7 @@ export default function ProductDetail() {
           <div className="breadcrumb__text">
             <h4>{product.name.toUpperCase()}</h4>
             <div className="breadcrumb__links">
-              <a href="/">HOME</a> <span>PRODUCT DETAILS</span>
+              <a href="/">{t("home")}</a> <span>{t("productdetail.title")}</span>
             </div>
           </div>
         </div>
@@ -155,7 +157,6 @@ export default function ProductDetail() {
                 />
               </div>
 
-              {/* THUMBNAILS */}
               {product.images?.length > 1 && (
                 <div className="d-flex flex-wrap gap-2 justify-content-center">
                   {product.images.map((img, idx) => (
@@ -165,7 +166,9 @@ export default function ProductDetail() {
                       alt="thumb"
                       onClick={() => setActiveImage(img)}
                       className={`rounded-3 shadow-sm ${
-                        activeImage?.url === img.url ? "border border-dark" : "border"
+                        activeImage?.url === img.url
+                          ? "border border-dark"
+                          : "border"
                       }`}
                       style={{
                         width: "90px",
@@ -258,10 +261,12 @@ export default function ProductDetail() {
                   </div>
                 )}
 
-                {/* ALERTS */}
                 {error && <AlertBox type="danger" message={error} />}
                 {addedToCart && (
-                  <AlertBox type="success" message="Product added to cart!" />
+                  <AlertBox
+                    type="success"
+                    message={t("productdetail.added_to_cart")}
+                  />
                 )}
 
                 {/* ADD TO CART */}
@@ -270,25 +275,26 @@ export default function ProductDetail() {
                   onClick={handleAddToCart}
                   disabled={addedToCart}
                 >
-                  {addedToCart ? "✅ ADDED TO CART" : "🛒 ADD TO CART"}
+                  {addedToCart
+                    ? t("productdetail.added_button")
+                    : t("productdetail.add_button")}
                 </button>
 
                 {/* META INFO */}
                 <ul className="list-unstyled mt-4">
                   <li>
-                    <strong>AVAILABILITY:</strong> <span>IN STOCK</span>
+                    <strong>{t("productdetail.availability")}</strong>{" "}
+                    <span>{t("productdetail.in_stock")}</span>
                   </li>
-
                   {product.catalog && (
                     <li>
-                      <strong>CATEGORY:</strong>{" "}
+                      <strong>{t("productdetail.category")}</strong>{" "}
                       <span>{String(product.catalog).toUpperCase()}</span>
                     </li>
                   )}
-
                   {Array.isArray(product.tags) && product.tags.length > 0 && (
                     <li>
-                      <strong>TAGS:</strong>{" "}
+                      <strong>{t("productdetail.tags")}</strong>{" "}
                       {product.tags.map((t) => String(t).toUpperCase()).join(", ")}
                     </li>
                   )}

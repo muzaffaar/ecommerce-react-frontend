@@ -47,7 +47,10 @@
         "clear": "Tozalash"
     },
     "errors": {
-        "load_products_failed": "Mahsulotlarni yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring."
+        "load_products_failed": "Mahsulotlarni yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring.",
+        "load_orders_failed": "Buyurtmalarni yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring.",
+        "load_cart_failed": "Savatchani yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring.",
+        "load_catalogs_failed": "Kataloglarni yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring."
     },
     "catalogpage": {
         "title": "Kataloglar",
@@ -61,18 +64,12 @@
         "prev": "Oldingi",
         "next": "Keyingi"
     },
-    "errors": {
-        "load_catalogs_failed": "Kataloglarni yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring."
-    },
     "orderpage": {
         "title": "Buyurtmalar",
         "loading": "Buyurtmalar yuklanmoqda...",
         "no_orders": "Buyurtmalar topilmadi.",
         "active_orders": "Faol / Kutilayotgan buyurtmalar",
         "completed_orders": "Bajarilgan buyurtmalar"
-    },
-    "errors": {
-        "load_orders_failed": "Buyurtmalarni yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring."
     },
     "ordercard": {
         "order": "Buyurtma",
@@ -128,9 +125,6 @@
         "item_removed": "Mahsulot savatdan olib tashlandi.",
         "delete_failed": "Mahsulotni o‘chirishda xatolik yuz berdi."
     },
-    "errors": {
-        "load_cart_failed": "Savatchani yuklashda xatolik yuz berdi. Keyinroq urinib ko‘ring."
-    },
     "checkoutpage": {
         "title": "Buyurtmani rasmiylashtirish",
         "title_short": "To‘lov",
@@ -159,21 +153,33 @@
         "cart_load_failed": "Savatchani yuklashda xatolik yuz berdi. Iltimos, keyinroq urinib ko‘ring."
     },
     "footer": {
-    "about_text": "Xaridor bizning o‘ziga xos biznes modelimiz markazida turadi, u dizayn va sifatni o‘z ichiga oladi.",
-    "shopping": "Do‘konlar",
-    "clothing_store": "Kiyim-kechak do‘koni",
-    "trending_shoes": "Ommabop poyabzallar",
-    "accessories": "Aksessuarlar",
-    "sale": "Chegirmalar",
-    "help_support": "Yordam va qo‘llab-quvvatlash",
-    "contact": "Biz bilan bog‘lanish",
-    "payment_methods": "To‘lov usullari",
-    "delivery": "Yetkazib berish",
-    "returns": "Qaytarish va almashtirish",
-    "newsletter": "Yangiliklarga obuna bo‘ling",
-    "newsletter_text": "Yangi mahsulotlar, aksiyalar va chegirmalardan birinchi bo‘lib xabardor bo‘ling!",
-    "email_placeholder": "Sizning email manzilingiz",
-    "subscribed": "✅ Muvaffaqiyatli obuna bo‘ldingiz!",
-    "copyright": "Mualliflik huquqi © {{year}}. Barcha huquqlar himoyalangan."
-  }
+        "about_text": "Xaridor bizning o‘ziga xos biznes modelimiz markazida turadi, u dizayn va sifatni o‘z ichiga oladi.",
+        "shopping": "Do‘konlar",
+        "clothing_store": "Kiyim-kechak do‘koni",
+        "trending_shoes": "Ommabop poyabzallar",
+        "accessories": "Aksessuarlar",
+        "sale": "Chegirmalar",
+        "help_support": "Yordam va qo‘llab-quvvatlash",
+        "contact": "Biz bilan bog‘lanish",
+        "payment_methods": "To‘lov usullari",
+        "delivery": "Yetkazib berish",
+        "returns": "Qaytarish va almashtirish",
+        "newsletter": "Yangiliklarga obuna bo‘ling",
+        "newsletter_text": "Yangi mahsulotlar, aksiyalar va chegirmalardan birinchi bo‘lib xabardor bo‘ling!",
+        "email_placeholder": "Sizning email manzilingiz",
+        "subscribed": "✅ Muvaffaqiyatli obuna bo‘ldingiz!",
+        "copyright": "Mualliflik huquqi © {{year}}. Barcha huquqlar himoyalangan."
+    },
+    "productdetail": {
+        "title": "Mahsulot tafsilotlari",
+        "not_found": "Mahsulot topilmadi yoki serverda xatolik yuz berdi.",
+        "add_failed": "Mahsulotni savatchaga qo‘shib bo‘lmadi.",
+        "added_to_cart": "Mahsulot savatchaga qo‘shildi!",
+        "add_button": "🛒 Savatchaga qo‘shish",
+        "added_button": "✅ Savatchaga qo‘shilgan",
+        "availability": "Mavjudlik:",
+        "in_stock": "Mavjud",
+        "category": "Kategoriya:",
+        "tags": "Teglar:"
+    }
 }
