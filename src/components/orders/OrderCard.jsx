@@ -8,14 +8,17 @@ import {
   FiMapPin,
   FiBox,
 } from "react-icons/fi";
+import { useTranslation } from "react-i18next"; // ✅ Import i18next
 
 export default function OrderCard({ order }) {
+  const { t } = useTranslation();
+
   const steps = [
-    { key: "pending", label: "Pending", icon: <FiClock /> },
-    { key: "paid", label: "Paid", icon: <FiCreditCard /> },
-    { key: "shipped", label: "Shipped", icon: <FiTruck /> },
-    { key: "completed", label: "Completed", icon: <FiCheckCircle /> },
-    { key: "cancelled", label: "Cancelled", icon: <FiXCircle /> },
+    { key: "pending", label: t("ordercard.pending"), icon: <FiClock /> },
+    { key: "paid", label: t("ordercard.paid"), icon: <FiCreditCard /> },
+    { key: "shipped", label: t("ordercard.shipped"), icon: <FiTruck /> },
+    { key: "completed", label: t("ordercard.completed"), icon: <FiCheckCircle /> },
+    { key: "cancelled", label: t("ordercard.cancelled"), icon: <FiXCircle /> },
   ];
 
   const status = String(order.status).toLowerCase();
@@ -26,7 +29,9 @@ export default function OrderCard({ order }) {
     <div className="modern-order-card">
       {/* Header */}
       <div className="order-header">
-        <h5>Order #{order.id}</h5>
+        <h5>
+          {t("ordercard.order")} #{order.id}
+        </h5>
         <span
           className={`status-badge ${
             status === "completed"
@@ -36,7 +41,7 @@ export default function OrderCard({ order }) {
               : "in-progress"
           }`}
         >
-          {order.status.toUpperCase()}
+          {t(`ordercard.${status}`) || order.status.toUpperCase()}
         </span>
       </div>
 
@@ -67,24 +72,25 @@ export default function OrderCard({ order }) {
       {/* Details */}
       <div className="order-details">
         <p>
-          <strong>Date:</strong>{" "}
+          <strong>{t("ordercard.date")}:</strong>{" "}
           {new Date(order.created_at).toLocaleDateString()}
         </p>
         <p>
-          <strong>Total:</strong> ${parseFloat(order.total_price || 0).toFixed(2)}
+          <strong>{t("ordercard.total")}:</strong>{" "}
+          ${parseFloat(order.total_price || 0).toFixed(2)}
         </p>
 
         {/* Shipping */}
         {order.shipping_address && (
           <div className="mt-3">
             <p className="mb-1 fw-semibold">
-              <FiMapPin className="me-1 text-danger" /> Shipping Address:
+              <FiMapPin className="me-1 text-danger" /> {t("ordercard.shipping_address")}:
             </p>
             <p className="small mb-0 text-muted">
               {order.shipping_address.recipient_name},{" "}
               {order.shipping_address.address_line},{" "}
-              {order.shipping_address.city}, {order.shipping_address.country}{" "}
-              ({order.shipping_address.postal_code})
+              {order.shipping_address.city}, {order.shipping_address.country} (
+              {order.shipping_address.postal_code})
             </p>
             <p className="small text-muted">
               📞 {order.shipping_address.phone}
@@ -95,7 +101,7 @@ export default function OrderCard({ order }) {
         {/* Items */}
         <div className="mt-3">
           <p className="fw-semibold d-flex align-items-center gap-1 mb-2">
-            <FiBox className="text-primary" /> Items:
+            <FiBox className="text-primary" /> {t("ordercard.items")}:
           </p>
           <ul className="order-items">
             {order.items?.map((item, i) => {
@@ -130,7 +136,7 @@ export default function OrderCard({ order }) {
                     </>
                   )}
                   <div className="small text-muted">
-                    Quantity: {item.quantity} × ${item.price}
+                    {t("ordercard.quantity")}: {item.quantity} × ${item.price}
                   </div>
                 </li>
               );

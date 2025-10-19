@@ -4,13 +4,16 @@ import api from "../services/api";
 import { API } from "../constants/api";
 import AlertBox from "../components/common/AlertBox";
 import CartItem from "../components/cart/CartItem";
-import { useLocale } from "../context/LocaleContext"; 
+import { useLocale } from "../context/LocaleContext";
+import { useTranslation } from "react-i18next";
 
 export default function Cart() {
   const { locale } = useLocale();
+  const { t, i18n } = useTranslation();
+
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false); // no hard loading screen
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
   const fetchCart = async () => {
@@ -25,7 +28,9 @@ export default function Cart() {
       console.error("❌ Fetch cart error:", err);
       setMessage({
         type: "danger",
-        text: err.response?.data?.message || "Failed to load cart.",
+        text:
+          err.response?.data?.message ||
+          t("errors.load_cart_failed"),
       });
     } finally {
       setLoading(false);
@@ -33,10 +38,10 @@ export default function Cart() {
   };
 
   useEffect(() => {
+    i18n.changeLanguage(locale);
     fetchCart();
-  }, [locale]);
+  }, [locale, i18n]);
 
-  // ✅ Update Quantity — fetch fresh localized response
   const handleQuantityChange = async (itemId, newQty) => {
     if (newQty < 1) return;
     setMessage({ type: "", text: "" });
@@ -57,56 +62,61 @@ export default function Cart() {
       const msg =
         updatedCart?.message ||
         updatedCart?.success ||
-        "Cart updated successfully.";
+        t("cartpage.updated");
       setMessage({ type: "success", text: msg });
     } catch (err) {
       console.error("❌ Update quantity error:", err);
       const msg =
         err.response?.data?.message ||
         err.response?.data?.error ||
-        "Failed to update quantity.";
+        t("cartpage.update_failed");
       setMessage({ type: "danger", text: msg });
     }
   };
 
-  // ✅ Delete Item
   const handleDelete = async (itemId) => {
     setMessage({ type: "", text: "" });
     try {
-      const res = await api.delete(`${API.CART.DELETE(locale)}?cart_item_id=${itemId}`);
-      await fetchCart(); // ensure synced cart
+      const res = await api.delete(
+        `${API.CART.DELETE(locale)}?cart_item_id=${itemId}`
+      );
+      await fetchCart();
       setMessage({
         type: "success",
-        text: res.data?.message || "Item removed from cart.",
+        text: res.data?.message || t("cartpage.item_removed"),
       });
     } catch (err) {
       console.error("❌ Delete error:", err);
       const msg =
         err.response?.data?.message ||
         err.response?.data?.error ||
-        "Failed to delete item.";
+        t("cartpage.delete_failed");
       setMessage({ type: "danger", text: msg });
     }
   };
-  
-window.dispatchEvent(new Event("cartUpdated"));
+
+  window.dispatchEvent(new Event("cartUpdated"));
 
   return (
     <>
-    {/* Alerts */}
-          {message.text && (
-            <div className="position-fixed top-0 start-50 translate-middle-x mt-3" style={{ zIndex: 1050 }}>
-              <AlertBox type={message.type} message={message.text} />
-            </div>
-          )}
+      {/* Alerts */}
+      {message.text && (
+        <div
+          className="position-fixed top-0 start-50 translate-middle-x mt-3"
+          style={{ zIndex: 1050 }}
+        >
+          <AlertBox type={message.type} message={message.text} />
+        </div>
+      )}
+
       {/* Breadcrumb */}
       <section className="breadcrumb-option">
         <div className="container">
           <div className="breadcrumb__text">
-            <h4>Shopping Cart</h4>
+            <h4>{t("cartpage.title")}</h4>
             <div className="breadcrumb__links">
-              <Link to="/">Home</Link>
-              <span>Cart</span>
+              <Link to="/">{t("home")}</Link>
+              <span>{t("cartpage.title_short")}</span>
             </div>
           </div>
         </div>
@@ -114,13 +124,11 @@ window.dispatchEvent(new Event("cartUpdated"));
 
       <section className="shopping-cart spad">
         <div className="container">
-          
-
           {items.length === 0 ? (
             <div className="text-center py-5">
-              <p className="text-muted mb-3">Your cart is empty.</p>
+              <p className="text-muted mb-3">{t("cartpage.empty")}</p>
               <Link to="/" className="btn btn-outline-dark">
-                🛍 Continue Shopping
+                🛍 {t("cartpage.continue_shopping")}
               </Link>
             </div>
           ) : (
@@ -131,10 +139,10 @@ window.dispatchEvent(new Event("cartUpdated"));
                   <table className="table table-borderless align-middle">
                     <thead className="border-bottom">
                       <tr className="text-uppercase small text-muted">
-                        <th className="text-start">Product</th>
-                        <th className="text-center">Price</th>
-                        <th className="text-center">Quantity</th>
-                        <th className="text-end">Total</th>
+                        <th className="text-start">{t("cartpage.product")}</th>
+                        <th className="text-center">{t("cartpage.price")}</th>
+                        <th className="text-center">{t("cartpage.quantity")}</th>
+                        <th className="text-end">{t("cartpage.total")}</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -153,7 +161,7 @@ window.dispatchEvent(new Event("cartUpdated"));
 
                 <div className="d-flex justify-content-between mt-3">
                   <Link to="/" className="btn btn-outline-dark">
-                    Continue Shopping
+                    {t("cartpage.continue_shopping")}
                   </Link>
                   <button
                     className="btn btn-dark d-flex align-items-center gap-2"
@@ -166,7 +174,7 @@ window.dispatchEvent(new Event("cartUpdated"));
                         role="status"
                       ></span>
                     )}
-                    Refresh Cart
+                    {t("cartpage.refresh")}
                   </button>
                 </div>
               </div>
@@ -178,7 +186,9 @@ window.dispatchEvent(new Event("cartUpdated"));
                   style={{ top: "100px" }}
                 >
                   <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h5 className="fw-bold text-uppercase mb-0">Cart Summary</h5>
+                    <h5 className="fw-bold text-uppercase mb-0">
+                      {t("cartpage.summary")}
+                    </h5>
                     {loading && (
                       <div
                         className="spinner-border spinner-border-sm text-secondary"
@@ -189,21 +199,21 @@ window.dispatchEvent(new Event("cartUpdated"));
 
                   <ul className="list-unstyled mb-4">
                     <li className="d-flex justify-content-between mb-2">
-                      <span>Subtotal</span>
+                      <span>{t("cartpage.subtotal")}</span>
                       <strong>${total.toFixed(2)}</strong>
                     </li>
                     <li className="d-flex justify-content-between mb-2">
-                      <span>Shipping</span>
-                      <strong>Free</strong>
+                      <span>{t("cartpage.shipping")}</span>
+                      <strong>{t("cartpage.free")}</strong>
                     </li>
                     <li className="d-flex justify-content-between border-top pt-2 mt-2">
-                      <span>Total</span>
+                      <span>{t("cartpage.total")}</span>
                       <strong>${total.toFixed(2)}</strong>
                     </li>
                   </ul>
 
                   <Link to="/checkout" className="btn btn-dark w-100 py-2">
-                    Proceed to Checkout
+                    {t("cartpage.checkout")}
                   </Link>
                 </div>
               </div>

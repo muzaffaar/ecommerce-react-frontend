@@ -6,9 +6,12 @@ import ProductCard from "../components/products/ProductCard";
 import AlertBox from "../components/common/AlertBox";
 import { useLocale } from "../context/LocaleContext";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // ✅ import for localization
 
 export default function Home() {
   const { locale } = useLocale();
+  const { t, i18n } = useTranslation();
+
   const [products, setProducts] = useState([]);
   const [recommended, setRecommended] = useState([]);
   const [catalogs, setCatalogs] = useState([]);
@@ -35,7 +38,7 @@ export default function Home() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        "Failed to load products. Please try again later."
+          t("errors.load_products_failed")
       );
     } finally {
       setLoading(false);
@@ -69,13 +72,14 @@ export default function Home() {
 
   // 🔁 Auto-refresh recommended every 20 seconds
   useEffect(() => {
+    i18n.changeLanguage(locale); // keep sync
     fetchProducts();
     fetchCatalogs();
     fetchRecommended();
 
     const interval = setInterval(() => fetchRecommended(true), 20000);
     return () => clearInterval(interval);
-  }, [locale]);
+  }, [locale, i18n]);
 
   const handleLoadMore = () => {
     if (pagination && pagination.current_page < pagination.last_page) {
@@ -102,12 +106,12 @@ export default function Home() {
           style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
         ></div>
         <div className="container position-relative z-2">
-          <h1 className="display-4 fw-bold mb-3">Welcome to Meetify</h1>
-          <p className="lead mb-4">
-            Discover the latest trends and timeless classics.
-          </p>
+          <h1 className="display-4 fw-bold mb-3">
+            {t("homepage.welcome_title")}
+          </h1>
+          <p className="lead mb-4">{t("homepage.welcome_subtitle")}</p>
           <a href="/products" className="btn btn-light btn-lg px-5">
-            Shop Now
+            {t("buttons.shop_now")}
           </a>
         </div>
       </section>
@@ -116,7 +120,7 @@ export default function Home() {
       <section className="categories py-5 bg-light">
         <div className="container">
           <h3 className="text-center mb-4 fw-bold text-uppercase">
-            Explore Categories
+            {t("homepage.explore_categories")}
           </h3>
           <div className="row g-4 justify-content-center">
             {catalogs.slice(0, 4).map((cat) => {
@@ -129,7 +133,10 @@ export default function Home() {
               return (
                 <div key={cat.id} className="col-6 col-md-3 text-center">
                   <div className="category-card p-3 rounded-4 shadow-sm bg-white h-100 hover-shadow transition">
-                    <Link to={`/products?catalog_id=${cat.id}`} className="text-decoration-none text-dark">
+                    <Link
+                      to={`/products?catalog_id=${cat.id}`}
+                      className="text-decoration-none text-dark"
+                    >
                       <div
                         className="rounded-circle mx-auto mb-3 border"
                         style={{
@@ -141,7 +148,9 @@ export default function Home() {
                           transition: "all 0.3s ease",
                         }}
                       ></div>
-                      <h6 className="fw-semibold text-uppercase mt-3">{cat.name}</h6>
+                      <h6 className="fw-semibold text-uppercase mt-3">
+                        {cat.name}
+                      </h6>
                     </Link>
                   </div>
                 </div>
@@ -151,7 +160,6 @@ export default function Home() {
         </div>
       </section>
 
-
       {/* 🤖 AI Recommended Products */}
       {recommended.length > 0 && (
         <section className="recommended-products py-5 bg-light position-relative">
@@ -159,15 +167,16 @@ export default function Home() {
             <div className="text-center mb-4">
               <h3 className="fw-bold text-uppercase">
                 <i className="fa fa-robot text-primary me-2"></i>
-                AI Recommended For You
+                {t("homepage.ai_recommended")}
               </h3>
               <p className="text-muted small mb-1">
-                Auto-refreshing recommendations every <b>20s</b>
+                {t("homepage.auto_refresh_note")}
               </p>
 
               {refreshing && (
                 <div className="d-inline-block small text-success">
-                  <i className="fa fa-sync-alt fa-spin me-1"></i>Refreshing...
+                  <i className="fa fa-sync-alt fa-spin me-1"></i>
+                  {t("homepage.refreshing")}
                 </div>
               )}
             </div>
@@ -189,14 +198,16 @@ export default function Home() {
       {/* 🛍️ Latest Products */}
       <section className="products py-5">
         <div className="container">
-          <h3 className="mb-4 text-center fw-bold">Latest Products</h3>
+          <h3 className="mb-4 text-center fw-bold">
+            {t("homepage.latest_products")}
+          </h3>
 
           {initialLoad && <Loader />}
 
           {!initialLoad && error && <AlertBox type="danger" message={error} />}
 
           {!initialLoad && !error && products.length === 0 && (
-            <AlertBox type="info" message="No products found." />
+            <AlertBox type="info" message={t("homepage.no_products")} />
           )}
 
           {!initialLoad && !error && products.length > 0 && (
@@ -209,7 +220,7 @@ export default function Home() {
                     </div>
                   ))
                 ) : (
-                  <p>No products found.</p>
+                  <p>{t("homepage.no_products")}</p>
                 )}
               </div>
 
@@ -221,10 +232,13 @@ export default function Home() {
                       onClick={handleLoadMore}
                       disabled={loading}
                     >
-                      {loading ? "Loading..." : "Load More"}
+                      {loading ? t("buttons.loading") : t("buttons.load_more")}
                     </button>
                     <p className="text-muted small mt-2">
-                      Showing {products.length} of {pagination.total} products
+                      {t("homepage.showing_count", {
+                        shown: products.length,
+                        total: pagination.total,
+                      })}
                     </p>
                   </div>
                 )}

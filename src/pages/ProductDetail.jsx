@@ -7,7 +7,7 @@ import AlertBox from "../components/common/AlertBox";
 
 export default function ProductDetail() {
   const { slug } = useParams();
-  const locale = localStorage.getItem("lang") || "en";
+  const locale = localStorage.getItem("lang") || "en";  
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { API } from "../constants/api";
 import { useLocale } from "../context/LocaleContext";
+import { useTranslation } from "react-i18next";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -12,11 +13,11 @@ import {
 } from "@stripe/react-stripe-js";
 import AlertBox from "../components/common/AlertBox";
 
-// ✅ Stripe public key
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 export default function Checkout() {
   const { locale } = useLocale();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -36,7 +37,6 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ type: "", message: "" });
 
-  // 🧾 Load cart items for order summary
   const fetchCart = async () => {
     try {
       const res = await api.get(API.CART.LIST(locale));
@@ -46,13 +46,14 @@ export default function Checkout() {
       console.error("❌ Fetch cart failed:", err);
       setAlert({
         type: "danger",
-        message: err.response?.data?.message || "Failed to load cart.",
+        message:
+          err.response?.data?.message || t("checkoutpage.cart_load_failed"),
       });
     }
   };
 
-  // 🧾 Ensure guest token & load cart
   useEffect(() => {
+    i18n.changeLanguage(locale);
     const ensureGuestToken = async () => {
       const existing = localStorage.getItem("guest_token");
       if (!existing) {
@@ -67,9 +68,8 @@ export default function Checkout() {
     };
     ensureGuestToken();
     fetchCart();
-  }, [locale]);
+  }, [locale, i18n]);
 
-  // 🔁 Form field handler
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -78,7 +78,6 @@ export default function Checkout() {
     }));
   };
 
-  // 🧾 Checkout handler (Stripe intent)
   const handleCheckout = async (e) => {
     e.preventDefault();
     setAlert({ type: "", message: "" });
@@ -97,12 +96,11 @@ export default function Checkout() {
       };
 
       const res = await api.post(API.CHECKOUT.CREATE(locale), payload);
-
       if (!res.data.client_secret)
         throw new Error("No client_secret returned from backend.");
 
       setClientSecret(res.data.client_secret);
-      setAlert({ type: "success", message: "Proceeding to payment..." });
+      setAlert({ type: "success", message: t("checkoutpage.proceed_payment") });
     } catch (err) {
       console.error("Checkout error:", err);
       setAlert({
@@ -110,7 +108,7 @@ export default function Checkout() {
         message:
           err.response?.data?.message ||
           err.message ||
-          "Failed to start checkout.",
+          t("checkoutpage.failed_checkout"),
       });
     } finally {
       setLoading(false);
@@ -124,17 +122,17 @@ export default function Checkout() {
       <section className="breadcrumb-option">
         <div className="container">
           <div className="breadcrumb__text">
-            <h4>Checkout</h4>
+            <h4>{t("checkoutpage.title")}</h4>
             <div className="breadcrumb__links">
-              <Link to="/">Home</Link>
-              <span>Checkout</span>
+              <Link to="/">{t("home")}</Link>
+              <span>{t("checkoutpage.title_short")}</span>
             </div>
           </div>
         </div>
       </section>
+
       <section className="checkout spad py-5">
         <div className="container">
-
           {alert.message && (
             <div className="mb-3">
               <AlertBox type={alert.type} message={alert.message} />
@@ -153,10 +151,15 @@ export default function Checkout() {
                   onSubmit={handleCheckout}
                   className="checkout__form bg-white shadow-sm p-4 rounded"
                 >
-                  <h5 className="fw-bold mb-4 text-uppercase">Billing Details</h5>
+                  <h5 className="fw-bold mb-4 text-uppercase">
+                    {t("checkoutpage.billing_details")}
+                  </h5>
+
                   <div className="row g-3">
                     <div className="col-12">
-                      <label className="form-label">Full Name</label>
+                      <label className="form-label">
+                        {t("checkoutpage.full_name")}
+                      </label>
                       <input
                         type="text"
                         name="recipient_name"
@@ -169,7 +172,9 @@ export default function Checkout() {
 
                     {/* Phone */}
                     <div className="col-md-6">
-                      <label className="form-label">Phone Number</label>
+                      <label className="form-label">
+                        {t("checkoutpage.phone")}
+                      </label>
                       <div className="input-group">
                         <select
                           name="country_code"
@@ -188,7 +193,7 @@ export default function Checkout() {
                           type="text"
                           name="phone_number"
                           className="form-control"
-                          placeholder="301234567"
+                          placeholder={t("checkoutpage.phone_placeholder")}
                           value={formData.phone_number}
                           onChange={handleChange}
                           required
@@ -197,7 +202,9 @@ export default function Checkout() {
                     </div>
 
                     <div className="col-md-6">
-                      <label className="form-label">Country</label>
+                      <label className="form-label">
+                        {t("checkoutpage.country")}
+                      </label>
                       <input
                         type="text"
                         name="country"
@@ -209,7 +216,9 @@ export default function Checkout() {
                     </div>
 
                     <div className="col-12">
-                      <label className="form-label">Address Line</label>
+                      <label className="form-label">
+                        {t("checkoutpage.address")}
+                      </label>
                       <input
                         type="text"
                         name="address_line"
@@ -221,7 +230,9 @@ export default function Checkout() {
                     </div>
 
                     <div className="col-md-6">
-                      <label className="form-label">City</label>
+                      <label className="form-label">
+                        {t("checkoutpage.city")}
+                      </label>
                       <input
                         type="text"
                         name="city"
@@ -233,7 +244,9 @@ export default function Checkout() {
                     </div>
 
                     <div className="col-md-6">
-                      <label className="form-label">Postal Code</label>
+                      <label className="form-label">
+                        {t("checkoutpage.postal_code")}
+                      </label>
                       <input
                         type="text"
                         name="postal_code"
@@ -253,8 +266,11 @@ export default function Checkout() {
                         checked={formData.save_address}
                         onChange={handleChange}
                       />
-                      <label htmlFor="saveAddress" className="form-check-label">
-                        Save this address for future orders
+                      <label
+                        htmlFor="saveAddress"
+                        className="form-check-label"
+                      >
+                        {t("checkoutpage.save_address")}
                       </label>
                     </div>
                   </div>
@@ -265,7 +281,9 @@ export default function Checkout() {
                       className="btn btn-dark px-5"
                       disabled={loading}
                     >
-                      {loading ? "Processing..." : "Proceed to Payment"}
+                      {loading
+                        ? t("checkoutpage.processing")
+                        : t("checkoutpage.proceed")}
                     </button>
                   </div>
                 </form>
@@ -274,11 +292,13 @@ export default function Checkout() {
               {/* RIGHT: Order Summary */}
               <div className="col-lg-4 col-md-6">
                 <div className="checkout__order shadow-sm rounded p-4 bg-light">
-                  <h5 className="fw-bold mb-3 text-uppercase">Your Order</h5>
+                  <h5 className="fw-bold mb-3 text-uppercase">
+                    {t("checkoutpage.your_order")}
+                  </h5>
 
                   <div className="checkout__order__products border-bottom pb-2 mb-3 d-flex justify-content-between">
-                    <span>Product</span>
-                    <span>Total</span>
+                    <span>{t("checkoutpage.product")}</span>
+                    <span>{t("checkoutpage.total")}</span>
                   </div>
 
                   <ul className="list-unstyled mb-3">
@@ -299,15 +319,15 @@ export default function Checkout() {
 
                   <ul className="list-unstyled border-top pt-2">
                     <li className="d-flex justify-content-between">
-                      <span>Subtotal</span>
+                      <span>{t("checkoutpage.subtotal")}</span>
                       <strong>${total.toFixed(2)}</strong>
                     </li>
                     <li className="d-flex justify-content-between">
-                      <span>Shipping</span>
-                      <strong>Free</strong>
+                      <span>{t("checkoutpage.shipping")}</span>
+                      <strong>{t("checkoutpage.free")}</strong>
                     </li>
                     <li className="d-flex justify-content-between">
-                      <span>Total</span>
+                      <span>{t("checkoutpage.total")}</span>
                       <strong>${total.toFixed(2)}</strong>
                     </li>
                   </ul>
@@ -322,9 +342,10 @@ export default function Checkout() {
 }
 
 function PaymentForm({ clientSecret }) {
+  const { t } = useTranslation();
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate(); // ✅ added
+  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -337,22 +358,14 @@ function PaymentForm({ clientSecret }) {
 
     const { error, paymentIntent } = await stripe.confirmCardPayment(
       clientSecret,
-      {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      }
+      { payment_method: { card: elements.getElement(CardElement) } }
     );
 
     if (error) {
       setMessage(error.message);
     } else if (paymentIntent.status === "succeeded") {
-      setMessage("✅ Payment successful! Redirecting to your orders...");
-      
-      // 🕒 small delay so user can see success message
-      setTimeout(() => {
-        navigate("/orders"); // ✅ redirect to orders page
-      }, 1500);
+      setMessage(t("checkoutpage.payment_success"));
+      setTimeout(() => navigate("/orders"), 1500);
     }
 
     setLoading(false);
@@ -364,7 +377,9 @@ function PaymentForm({ clientSecret }) {
       className="mx-auto shadow-sm bg-white p-4 rounded"
       style={{ maxWidth: "500px" }}
     >
-      <h5 className="mb-3 text-center text-uppercase">Payment Details</h5>
+      <h5 className="mb-3 text-center text-uppercase">
+        {t("checkoutpage.payment_details")}
+      </h5>
       <div className="mb-3 border rounded p-3">
         <CardElement />
       </div>
@@ -374,7 +389,7 @@ function PaymentForm({ clientSecret }) {
           className="btn btn-success px-5"
           disabled={!stripe || loading}
         >
-          {loading ? "Processing..." : "Pay Now"}
+          {loading ? t("checkoutpage.processing") : t("checkoutpage.pay_now")}
         </button>
       </div>
       {message && (

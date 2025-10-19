@@ -4,9 +4,11 @@ import api from "../services/api";
 import { API, API_BASE } from "../constants/api";
 import AlertBox from "../components/common/AlertBox";
 import { useLocale } from "../context/LocaleContext";
+import { useTranslation } from "react-i18next"; // ✅ Import translation hook
 
 export default function Catalogs() {
   const { locale } = useLocale();
+  const { t, i18n } = useTranslation();
   const [catalogs, setCatalogs] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ export default function Catalogs() {
       const msg =
         err.response?.data?.message ||
         Object.values(err.response?.data?.errors || {}).flat().join("\n") ||
-        "Failed to fetch catalogs";
+        t("errors.load_catalogs_failed");
       setError(msg);
     } finally {
       setLoading(false);
@@ -34,8 +36,9 @@ export default function Catalogs() {
   };
 
   useEffect(() => {
+    i18n.changeLanguage(locale);
     fetchCatalogs(1);
-  }, [locale]);
+  }, [locale, i18n]);
 
   const renderPagination = () => {
     if (!pagination || pagination.last_page <= 1) return null;
@@ -65,7 +68,7 @@ export default function Catalogs() {
               fetchCatalogs(pagination.current_page - 1);
             }}
           >
-            Prev
+            {t("pagination.prev")}
           </a>
         )}
         {pages.map((p, idx) =>
@@ -95,7 +98,7 @@ export default function Catalogs() {
               fetchCatalogs(pagination.current_page + 1);
             }}
           >
-            Next
+            {t("pagination.next")}
           </a>
         )}
       </div>
@@ -108,10 +111,10 @@ export default function Catalogs() {
       <section className="breadcrumb-option">
         <div className="container">
           <div className="breadcrumb__text">
-            <h4>Catalogs</h4>
+            <h4>{t("catalogpage.title")}</h4>
             <div className="breadcrumb__links">
-              <Link to="/">Home</Link>
-              <span>Catalogs</span>
+              <Link to="/">{t("home")}</Link>
+              <span>{t("catalogpage.title")}</span>
             </div>
           </div>
         </div>
@@ -121,13 +124,13 @@ export default function Catalogs() {
       <section className="shop spad">
         <div className="container">
           <div className="section-title text-center mb-5">
-            <h2>Explore Catalogs</h2>
+            <h2>{t("catalogpage.explore_catalogs")}</h2>
           </div>
 
-          {loading && <AlertBox type="info" message="Loading catalogs..." />}
+          {loading && <AlertBox type="info" message={t("catalogpage.loading")} />}
           {error && <AlertBox type="danger" message={error} />}
           {!loading && !error && catalogs.length === 0 && (
-            <AlertBox type="secondary" message="No catalogs available." />
+            <AlertBox type="secondary" message={t("catalogpage.no_catalogs")} />
           )}
 
           <div className="row">
@@ -155,14 +158,13 @@ export default function Catalogs() {
                       <p className="text-muted mb-3">
                         {catalog.description?.length > 80
                           ? catalog.description.slice(0, 80) + "..."
-                          : catalog.description ||
-                            "Explore our latest collection."}
+                          : catalog.description || t("catalogpage.default_description")}
                       </p>
                       <Link
                         to={`/products?catalog_id=${catalog.id}`}
                         className="btn btn-outline-dark btn-sm px-4 rounded-pill"
                       >
-                        View Products
+                        {t("catalogpage.view_products")}
                       </Link>
                     </div>
                   </div>

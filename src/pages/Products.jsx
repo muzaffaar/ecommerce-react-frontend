@@ -7,9 +7,11 @@ import axios from "axios";
 import { API } from "../constants/api";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import { useTranslation } from "react-i18next"; // ✅ Localization hook
 
 const Products = () => {
   const { locale } = useLocale();
+  const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -72,6 +74,7 @@ const Products = () => {
 
   // Read catalog_id from URL and auto-apply
   useEffect(() => {
+    i18n.changeLanguage(locale);
     loadCatalogs();
 
     const fromUrl = searchParams.get("catalog_id") || "";
@@ -82,7 +85,7 @@ const Products = () => {
       loadProducts({ page: 1 });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale, searchParams.toString()]); // reacts to locale changes and URL changes
+  }, [locale, searchParams.toString()]);
 
   // Handlers
   const handleChange = (e) => {
@@ -91,7 +94,6 @@ const Products = () => {
   };
 
   const applyFilters = () => {
-    // keep URL in sync so refresh/deeplink works
     const params = new URLSearchParams();
     if (filters.catalog_id) params.set("catalog_id", String(filters.catalog_id));
     if (filters.search) params.set("search", filters.search);
@@ -120,7 +122,6 @@ const Products = () => {
   const goToPage = (page) => {
     if (page >= 1 && page <= pagination.last_page) {
       loadProducts({ ...filters, page });
-      // preserve current query on page changes
       const params = new URLSearchParams(searchParams);
       params.set("page", String(page));
       setSearchParams(params);
@@ -152,10 +153,10 @@ const Products = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="breadcrumb__text">
-                <h4>Shop</h4>
+                <h4>{t("productpage.shop")}</h4>
                 <div className="breadcrumb__links">
-                  <a href="/">Home</a>
-                  <span>Shop</span>
+                  <a href="/">{t("home")}</a>
+                  <span>{t("productpage.shop")}</span>
                 </div>
               </div>
             </div>
@@ -170,6 +171,7 @@ const Products = () => {
             {/* Sidebar */}
             <div className="col-lg-3">
               <div className="shop__sidebar">
+                {/* Search */}
                 <div className="shop__sidebar__search">
                   <form
                     onSubmit={(e) => {
@@ -180,7 +182,7 @@ const Products = () => {
                     <input
                       type="text"
                       name="search"
-                      placeholder="Search..."
+                      placeholder={t("productpage.search_placeholder")}
                       value={filters.search}
                       onChange={handleChange}
                     />
@@ -196,7 +198,7 @@ const Products = () => {
                     <div className="card">
                       <div className="card-heading">
                         <a data-toggle="collapse" data-target="#collapseOne" className="fw-bold text-uppercase">
-                          Categories
+                          {t("productpage.categories")}
                         </a>
                       </div>
 
@@ -218,7 +220,7 @@ const Products = () => {
                                       loadProducts({ page: 1 });
                                     }}
                                   >
-                                    All
+                                    {t("productpage.all")}
                                   </a>
                                 </li>
 
@@ -252,7 +254,7 @@ const Products = () => {
                     <div className="card">
                       <div className="card-heading">
                         <a data-toggle="collapse" data-target="#collapsePrice" className="fw-bold text-uppercase">
-                          Filter Price
+                          {t("productpage.filter_price")}
                         </a>
                       </div>
                       <div id="collapsePrice" className="collapse show" data-parent="#accordionExample">
@@ -262,7 +264,7 @@ const Products = () => {
                               <input
                                 type="number"
                                 name="price_min"
-                                placeholder="Min"
+                                placeholder={t("productpage.price_min")}
                                 value={filters.price_min}
                                 onChange={handleChange}
                                 className="price-input"
@@ -270,7 +272,7 @@ const Products = () => {
                               <input
                                 type="number"
                                 name="price_max"
-                                placeholder="Max"
+                                placeholder={t("productpage.price_max")}
                                 value={filters.price_max}
                                 onChange={handleChange}
                                 className="price-input"
@@ -285,7 +287,7 @@ const Products = () => {
                     <div className="card">
                       <div className="card-heading">
                         <a data-toggle="collapse" data-target="#collapseSort" className="fw-bold text-uppercase">
-                          Sorting
+                          {t("productpage.sorting")}
                         </a>
                       </div>
 
@@ -293,10 +295,10 @@ const Products = () => {
                         <div className="card-body">
                           <div className="d-flex flex-column gap-2">
                             <select name="sort_by" className="sort-select" value={filters.sort_by} onChange={handleChange}>
-                              <option value="">Default</option>
-                              <option value="price">Price</option>
-                              <option value="name">Name</option>
-                              <option value="created_at">Newest</option>
+                              <option value="">{t("productpage.default")}</option>
+                              <option value="price">{t("productpage.price")}</option>
+                              <option value="name">{t("productpage.name")}</option>
+                              <option value="created_at">{t("productpage.newest")}</option>
                             </select>
 
                             <select
@@ -305,9 +307,9 @@ const Products = () => {
                               value={filters.sort_order}
                               onChange={handleChange}
                             >
-                              <option value="">Default</option>
-                              <option value="asc">Ascending</option>
-                              <option value="desc">Descending</option>
+                              <option value="">{t("productpage.default")}</option>
+                              <option value="asc">{t("productpage.ascending")}</option>
+                              <option value="desc">{t("productpage.descending")}</option>
                             </select>
                           </div>
                         </div>
@@ -316,10 +318,10 @@ const Products = () => {
 
                     <div className="mt-4">
                       <button className="site-btn w-100 mb-2" onClick={applyFilters}>
-                        Apply
+                        {t("buttons.apply")}
                       </button>
                       <button className="btn btn-outline-dark w-100" onClick={clearFilters}>
-                        Clear
+                        {t("buttons.clear")}
                       </button>
                     </div>
                   </div>
@@ -334,14 +336,17 @@ const Products = () => {
                   <div className="col-lg-6 col-md-6 col-sm-6">
                     <div className="shop__product__option__left">
                       <p>
-                        Showing {products.length} of {pagination.total} results
+                        {t("productpage.showing_results", {
+                          shown: products.length,
+                          total: pagination.total,
+                        })}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="row"> 
+              <div className="row">
                 {products.length > 0 ? (
                   products.map((p) => (
                     <div key={p.id} className="col-lg-4 col-md-6 col-sm-6">
@@ -349,7 +354,7 @@ const Products = () => {
                     </div>
                   ))
                 ) : (
-                  <p>No products found.</p>
+                  <p>{t("productpage.no_products")}</p>
                 )}
               </div>
 
@@ -379,7 +384,6 @@ const Products = () => {
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </section>

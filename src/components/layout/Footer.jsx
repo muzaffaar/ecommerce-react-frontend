@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="footer">
       <div className="container">
@@ -21,51 +24,47 @@ export default function Footer() {
                   Meetify
                 </Link>
               </div>
-              <p>
-                The customer is at the heart of our unique business model, which
-                includes design and quality.
-              </p>
-              {/* <img src="/img/payment.png" alt="Payment methods" /> */}
+              <p>{t("footer.about_text")}</p>
             </div>
           </div>
 
           {/* Shopping Links 1 */}
           <div className="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
             <div className="footer__widget">
-              <h6>Shopping</h6>
+              <h6>{t("footer.shopping")}</h6>
               <ul>
                 <li>
-                  <Link to="/catalogs">Clothing Store</Link>
+                  <Link to="/catalogs">{t("footer.clothing_store")}</Link>
                 </li>
                 <li>
-                  <Link to="/products">Trending Shoes</Link>
+                  <Link to="/products">{t("footer.trending_shoes")}</Link>
                 </li>
                 <li>
-                  <Link to="/products">Accessories</Link>
+                  <Link to="/products">{t("footer.accessories")}</Link>
                 </li>
                 <li>
-                  <Link to="/sale">Sale</Link>
+                  <Link to="/sale">{t("footer.sale")}</Link>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Shopping Links 2 */}
+          {/* Help Links */}
           <div className="col-lg-2 col-md-3 col-sm-6">
             <div className="footer__widget">
-              <h6>Help & Support</h6>
+              <h6>{t("footer.help_support")}</h6>
               <ul>
                 <li>
-                  <Link to="/contact">Contact Us</Link>
+                  <Link to="/contact">{t("footer.contact")}</Link>
                 </li>
                 <li>
-                  <Link to="/payments">Payment Methods</Link>
+                  <Link to="/payments">{t("footer.payment_methods")}</Link>
                 </li>
                 <li>
-                  <Link to="/delivery">Delivery</Link>
+                  <Link to="/delivery">{t("footer.delivery")}</Link>
                 </li>
                 <li>
-                  <Link to="/returns">Return & Exchanges</Link>
+                  <Link to="/returns">{t("footer.returns")}</Link>
                 </li>
               </ul>
             </div>
@@ -74,19 +73,20 @@ export default function Footer() {
           {/* Newsletter */}
           <div className="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
             <div className="footer__widget">
-              <h6>Newsletter</h6>
+              <h6>{t("footer.newsletter")}</h6>
               <div className="footer__newslatter">
-                <p>
-                  Be the first to know about new arrivals, look books, sales &
-                  promos!
-                </p>
+                <p>{t("footer.newsletter_text")}</p>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    alert("Subscribed successfully!");
+                    alert(t("footer.subscribed"));
                   }}
                 >
-                  <input type="email" placeholder="Your email" required />
+                  <input
+                    type="email"
+                    placeholder={t("footer.email_placeholder")}
+                    required
+                  />
                   <button type="submit">
                     <span className="icon_mail_alt"></span>
                   </button>
@@ -101,7 +101,9 @@ export default function Footer() {
           <div className="col-lg-12 text-center">
             <div className="footer__copyright__text">
               <p>
-                Copyright © {new Date().getFullYear()} All rights reserved.
+                {t("footer.copyright", {
+                  year: new Date().getFullYear(),
+                })}
               </p>
             </div>
           </div>

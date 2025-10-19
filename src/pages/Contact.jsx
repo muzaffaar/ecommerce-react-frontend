@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import api from "../services/api";
 import { API } from "../constants/api";
 import AlertBox from "../components/common/AlertBox";
+import { useTranslation } from "react-i18next";
 
 export default function Contact() {
+  const { t } = useTranslation();
+
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ type: "", message: "" });
@@ -23,7 +26,7 @@ export default function Contact() {
       await api.post(API.CONTACT.SEND, form);
       setAlert({
         type: "success",
-        message: "✅ Your message has been sent successfully!",
+        message: t("contactpage.success_message"),
       });
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
@@ -31,7 +34,7 @@ export default function Contact() {
         type: "danger",
         message:
           err.response?.data?.message ||
-          "❌ Something went wrong. Please try again later.",
+          t("contactpage.error_message"),
       });
     } finally {
       setLoading(false);
@@ -44,10 +47,10 @@ export default function Contact() {
       <section className="breadcrumb-option bg-light py-4">
         <div className="container">
           <div className="breadcrumb__text">
-            <h4 className="fw-bold">Contact Us</h4>
+            <h4 className="fw-bold">{t("contactpage.title")}</h4>
             <div className="breadcrumb__links">
-              <Link to="/">Home</Link>
-              <span>Contact</span>
+              <Link to="/">{t("home")}</Link>
+              <span>{t("contactpage.title_short")}</span>
             </div>
           </div>
         </div>
@@ -73,12 +76,8 @@ export default function Contact() {
             <div className="col-lg-5">
               <div className="contact-info card border-0 shadow-sm p-4 rounded-4 h-100">
                 <div className="section-title mb-4">
-                  <h3 className="fw-bold text-dark mb-2">Get in Touch</h3>
-                  <p className="text-muted">
-                    We're based in Debrecen, Hungary. Reach out to us for
-                    inquiries, support, or collaborations — we'll get back to
-                    you within 24 hours.
-                  </p>
+                  <h3 className="fw-bold text-dark mb-2">{t("contactpage.get_in_touch")}</h3>
+                  <p className="text-muted">{t("contactpage.description")}</p>
                 </div>
 
                 <ul className="list-unstyled">
@@ -87,9 +86,9 @@ export default function Contact() {
                       <i className="fa fa-map-marker text-danger fs-5"></i>
                     </div>
                     <div>
-                      <h6 className="fw-bold mb-1">Hungary</h6>
+                      <h6 className="fw-bold mb-1">{t("contactpage.country")}</h6>
                       <p className="mb-0 text-muted small">
-                        University of Debrecen, Kolónia Street 70, Debrecen
+                        {t("contactpage.address")}
                       </p>
                     </div>
                   </li>
@@ -98,12 +97,9 @@ export default function Contact() {
                       <i className="fa fa-phone text-success fs-5"></i>
                     </div>
                     <div>
-                      <h6 className="fw-bold mb-1">Call Us</h6>
+                      <h6 className="fw-bold mb-1">{t("contactpage.call_us")}</h6>
                       <p className="mb-0">
-                        <a
-                          href="tel:+36705430298"
-                          className="text-decoration-none text-dark"
-                        >
+                        <a href="tel:+36705430298" className="text-decoration-none text-dark">
                           +36 70 543 0298
                         </a>
                       </p>
@@ -114,7 +110,7 @@ export default function Contact() {
                       <i className="fa fa-envelope text-primary fs-5"></i>
                     </div>
                     <div>
-                      <h6 className="fw-bold mb-1">Email</h6>
+                      <h6 className="fw-bold mb-1">{t("contactpage.email")}</h6>
                       <p className="mb-0">
                         <a
                           href="mailto:muzaffar-shoshiy@mailbox.unideb.hu"
@@ -132,7 +128,7 @@ export default function Contact() {
             {/* Form */}
             <div className="col-lg-7">
               <div className="contact-form card border-0 shadow-sm p-4 rounded-4">
-                <h4 className="fw-bold mb-4">Send Us a Message</h4>
+                <h4 className="fw-bold mb-4">{t("contactpage.send_message")}</h4>
 
                 {alert.message && (
                   <AlertBox type={alert.type} message={alert.message} />
@@ -147,12 +143,12 @@ export default function Contact() {
                           name="name"
                           id="name"
                           className="form-control"
-                          placeholder="Your Name"
+                          placeholder={t("contactpage.name_placeholder")}
                           value={form.name}
                           onChange={handleChange}
                           required
                         />
-                        <label htmlFor="name">Your Name</label>
+                        <label htmlFor="name">{t("contactpage.name_label")}</label>
                       </div>
                     </div>
                     <div className="col-md-6">
@@ -162,12 +158,12 @@ export default function Contact() {
                           name="email"
                           id="email"
                           className="form-control"
-                          placeholder="Your Email"
+                          placeholder={t("contactpage.email_placeholder")}
                           value={form.email}
                           onChange={handleChange}
                           required
                         />
-                        <label htmlFor="email">Your Email</label>
+                        <label htmlFor="email">{t("contactpage.email_label")}</label>
                       </div>
                     </div>
                     <div className="col-12">
@@ -176,13 +172,13 @@ export default function Contact() {
                           name="message"
                           id="message"
                           className="form-control"
-                          placeholder="Message"
+                          placeholder={t("contactpage.message_placeholder")}
                           style={{ height: "150px" }}
                           value={form.message}
                           onChange={handleChange}
                           required
                         ></textarea>
-                        <label htmlFor="message">Your Message</label>
+                        <label htmlFor="message">{t("contactpage.message_label")}</label>
                       </div>
                     </div>
                     <div className="col-12 text-end">
@@ -194,12 +190,12 @@ export default function Contact() {
                         {loading ? (
                           <>
                             <i className="fa fa-spinner fa-spin me-2"></i>
-                            Sending...
+                            {t("contactpage.sending")}
                           </>
                         ) : (
                           <>
-                            <i className="fa fa-paper-plane me-2"></i>Send
-                            Message
+                            <i className="fa fa-paper-plane me-2"></i>
+                            {t("contactpage.send_button")}
                           </>
                         )}
                       </button>

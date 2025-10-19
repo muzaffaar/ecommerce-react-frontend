@@ -3,11 +3,11 @@ import api from "../../services/api";
 import { API } from "../../constants/api";
 import AlertBox from "../../components/common/AlertBox";
 import OrderCard from "../../components/orders/OrderCard";
-
-// ✅ Import modern icons
 import { FiClock, FiCheckCircle } from "react-icons/fi";
+import { useTranslation } from "react-i18next"; // ✅ Import translation hook
 
 export default function Orders() {
+  const { t, i18n } = useTranslation();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -17,13 +17,16 @@ export default function Orders() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    i18n.changeLanguage(locale);
+
     const fetchOrders = async () => {
       setLoading(true);
       setMessage("");
       try {
-        const res = await api.get(API.ORDER.LIST(locale), {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get(API.ORDER.LIST(locale),
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          });
         setOrders(res.data.orders || []);
         setType("success");
       } catch (err) {
@@ -33,15 +36,17 @@ export default function Orders() {
             Object.values(err.response.data?.errors || {}).flat().join("\n");
           setMessage(backendMsg);
           setType("danger");
+        } else {
+          setMessage(t("errors.load_orders_failed"));
+          setType("danger");
         }
       } finally {
         setLoading(false);
       }
     };
     fetchOrders();
-  }, [locale, token]);
+  }, [locale, token, i18n, t]);
 
-  // 🧠 Segregate orders
   const completedStatuses = ["completed", "delivered", "finished"];
   const completedOrders = orders.filter((o) =>
     completedStatuses.includes(String(o.status).toLowerCase())
@@ -58,10 +63,10 @@ export default function Orders() {
           <div className="row">
             <div className="col-lg-12">
               <div className="breadcrumb__text">
-                <h4>Orders</h4>
+                <h4>{t("orderpage.title")}</h4>
                 <div className="breadcrumb__links">
-                  <a href="/">Home</a>
-                  <span>Orders</span>
+                  <a href="/">{t("home")}</a>
+                  <span>{t("orderpage.title")}</span>
                 </div>
               </div>
             </div>
@@ -72,18 +77,20 @@ export default function Orders() {
       <div className="container py-5">
         <AlertBox type={type} message={message} />
 
-        {loading && <p>Loading...</p>}
+        {loading && <p>{t("orderpage.loading")}</p>}
 
         {!loading && orders.length === 0 && !message && (
-          <div className="alert alert-light text-center">No orders found.</div>
+          <div className="alert alert-light text-center">
+            {t("orderpage.no_orders")}
+          </div>
         )}
 
         {/* 🕒 ACTIVE / PENDING */}
         {!loading && otherOrders.length > 0 && (
           <div className="mb-5">
-            <h4 className="section-title border-bottom pb-2">
+            <h4 className="section-title border-bottom pb-2 d-flex align-items-center gap-2">
               <FiClock size={20} color="#0d6efd" />
-              <span>Active / Pending Orders</span>
+              <span>{t("orderpage.active_orders")}</span>
             </h4>
             <div className="d-flex flex-column gap-3">
               {otherOrders.map((order) => (
@@ -96,9 +103,9 @@ export default function Orders() {
         {/* ✅ COMPLETED */}
         {!loading && completedOrders.length > 0 && (
           <div>
-            <h4 className="section-title border-bottom pb-2">
+            <h4 className="section-title border-bottom pb-2 d-flex align-items-center gap-2">
               <FiCheckCircle size={20} color="#28a745" />
-              <span>Completed Orders</span>
+              <span>{t("orderpage.completed_orders")}</span>
             </h4>
             <div className="d-flex flex-column gap-3">
               {completedOrders.map((order) => (
