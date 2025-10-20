@@ -87,7 +87,7 @@ export default function Home() {
     }
   };
 
-  return (
+  return ( 
     <>
       {/* 🖼️ Hero Section */}
       <section
@@ -181,11 +181,11 @@ export default function Home() {
               )}
             </div>
 
-            <div className="row g-4 justify-content-center">
+            <div className="row g-5">
               {recommended.slice(0, 8).map((product) => (
                 <div
                   key={product.id}
-                  className="col-sm-6 col-md-4 col-lg-3 d-flex"
+                  className="col-lg-4 col-md-6 col-sm-6"
                 >
                   <ProductCard product={product} />
                 </div>
