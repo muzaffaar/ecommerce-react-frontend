@@ -38,7 +38,7 @@ export default function Home() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          t("errors.load_products_failed")
+        t("errors.load_products_failed")
       );
     } finally {
       setLoading(false);
@@ -87,7 +87,7 @@ export default function Home() {
     }
   };
 
-  return ( 
+  return (
     <>
       {/* 🖼️ Hero Section */}
       <section
@@ -130,15 +130,30 @@ export default function Home() {
                   ? `${baseURL}/storage/${cat.images[0].url}`
                   : "https://via.placeholder.com/300x300?text=No+Image";
 
+              const hasDiscount = !!cat.discount;
+              const discountValue =
+                hasDiscount && cat.discount.type === "percentage"
+                  ? `${cat.discount.value}%`
+                  : hasDiscount
+                    ? `$${cat.discount.value}`
+                    : null;
+
               return (
                 <div key={cat.id} className="col-6 col-md-3 text-center">
-                  <div className="category-card p-3 rounded-4 shadow-sm bg-white h-100 hover-shadow transition">
+                  <div className="category-card p-3 rounded-4 shadow-sm bg-white h-100 hover-shadow transition position-relative">
+                    {/* 🏷 Discount Ribbon */}
+                    {hasDiscount && (
+                      <div className="discount-ribbon position-absolute small-ribbon">
+                        <span>-{discountValue}</span>
+                      </div>
+                    )}
+
                     <Link
                       to={`/products?catalog_id=${cat.id}`}
                       className="text-decoration-none text-dark"
                     >
                       <div
-                        className="rounded-circle mx-auto mb-3 border"
+                        className="rounded-circle mx-auto mb-3 border position-relative"
                         style={{
                           width: "130px",
                           height: "130px",
@@ -148,9 +163,7 @@ export default function Home() {
                           transition: "all 0.3s ease",
                         }}
                       ></div>
-                      <h6 className="fw-semibold text-uppercase mt-3">
-                        {cat.name}
-                      </h6>
+                      <h6 className="fw-semibold text-uppercase mt-3">{cat.name}</h6>
                     </Link>
                   </div>
                 </div>
@@ -159,6 +172,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
 
       {/* 🤖 AI Recommended Products */}
       {recommended.length > 0 && (

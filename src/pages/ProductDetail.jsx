@@ -165,11 +165,10 @@ export default function ProductDetail() {
                       src={`${baseURL}/storage/${img.url}`}
                       alt="thumb"
                       onClick={() => setActiveImage(img)}
-                      className={`rounded-3 shadow-sm ${
-                        activeImage?.url === img.url
+                      className={`rounded-3 shadow-sm ${activeImage?.url === img.url
                           ? "border border-dark"
                           : "border"
-                      }`}
+                        }`}
                       style={{
                         width: "90px",
                         height: "90px",
@@ -219,11 +218,10 @@ export default function ProductDetail() {
                                 onClick={() =>
                                   handleVariationClick(variation.name, val)
                                 }
-                                className={`variation-pill ${
-                                  isSelected
+                                className={`variation-pill ${isSelected
                                     ? "variation-selected"
                                     : "variation-normal"
-                                }`}
+                                  }`}
                                 style={{
                                   border: isSelected
                                     ? "2px solid #000"
@@ -279,6 +277,91 @@ export default function ProductDetail() {
                     ? t("productdetail.added_button")
                     : t("productdetail.add_button")}
                 </button>
+
+                {/* DISCOUNT INFO */}
+                {product.discount && (
+                  <div className="alert alert-info mt-4 py-2">
+                    <strong>{t("productdetail.discount")}:</strong>{" "}
+                    {product.discount.type === "percentage"
+                      ? `${product.discount.value}%`
+                      : `$${product.discount.value}`}{" "}
+                    {t("productdetail.valid_until")}:{" "}
+                    {new Date(product.discount.ends_at).toLocaleDateString()}
+                  </div>
+                )}
+                
+                {/* CATALOG DISCOUNT INFO */}
+                {product.catalog_discount && (
+                  <div className="alert alert-info mt-4 py-2">
+                    <strong>{t("productdetail.discount")}:</strong>{" "}
+                    {product.catalog_discount.type === "percentage"
+                      ? `${product.catalog_discount.value}%`
+                      : `$${product.catalog_discount.value}`}{" "}
+                    {t("productdetail.valid_until")}:{" "}
+                    {new Date(product.catalog_discount.ends_at).toLocaleDateString()}
+                  </div>
+                )}
+
+                {/* REVIEW SUMMARY */}
+                {product.review_summary && (
+                  <div className="review-summary mt-4">
+                    <div className="d-flex align-items-center gap-2 mb-2">
+                      <div>
+                        {[1, 2, 3, 4, 5].map((num) => (
+                          <i
+                            key={num}
+                            className={`fa fa-star ${num <= product.review_summary.average_rating ? "text-warning" : "text-muted"
+                              }`}
+                          ></i>
+                        ))}
+                      </div>
+                      <span className="fw-semibold">
+                        {product.review_summary.average_rating.toFixed(1)} / 5
+                      </span>
+                      <small className="text-muted">
+                        ({product.review_summary.total_reviews}{" "}
+                        {t("productdetail.reviews_label")})
+                      </small>
+                    </div>
+                    <hr />
+                  </div>
+                )}
+
+                {/* REVIEWS SECTION */}
+                {Array.isArray(product.reviews) && product.reviews.length > 0 && (
+                  <div className="mt-3">
+                    <h5 className="fw-bold mb-3">{t("productdetail.customer_reviews")}</h5>
+                    <div className="d-flex flex-column gap-3">
+                      {product.reviews.map((r) => (
+                        <div
+                          key={r.id}
+                          className="border rounded-3 p-3 shadow-sm bg-light"
+                          style={{ borderLeft: "5px solid #0d6efd" }}
+                        >
+                          <div className="d-flex align-items-center justify-content-between">
+                            <strong>{r.user}</strong>
+                            <small className="text-muted">
+                              {new Date(r.created_at).toLocaleDateString()}
+                            </small>
+                          </div>
+
+                          <div className="mb-1">
+                            {[1, 2, 3, 4, 5].map((num) => (
+                              <i
+                                key={num}
+                                className={`fa fa-star ${num <= r.rating ? "text-warning" : "text-muted"
+                                  }`}
+                              ></i>
+                            ))}
+                          </div>
+
+                          <p className="mb-0">{r.comment}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
 
                 {/* META INFO */}
                 <ul className="list-unstyled mt-4">

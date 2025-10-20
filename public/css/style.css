@@ -4448,3 +4448,28 @@ ol {
   border-color: #000;
   box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
 }
+
+.discount-ribbon {
+  top: 12px;
+  left: -8px;
+  background: #dc3545; /* Bootstrap red */
+  color: #fff;
+  padding: 6px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  transform: rotate(-10deg);
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+}
+.discount-ribbon span {
+  display: inline-block;
+  line-height: 1;
+}
+.catalog-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.catalog-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}

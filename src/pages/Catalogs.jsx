@@ -140,11 +140,27 @@ export default function Catalogs() {
                   ? `${baseURL}/storage/${catalog.images[0].url}`
                   : "https://via.placeholder.com/400x250?text=No+Image";
 
+              // check if discount exists
+              const hasDiscount = catalog.discount !== null;
+              const discountValue =
+                hasDiscount && catalog.discount.type === "percentage"
+                  ? `${catalog.discount.value}%`
+                  : hasDiscount
+                    ? `$${catalog.discount.value}`
+                    : null;
+
               return (
                 <div key={catalog.id} className="col-lg-4 col-md-6 col-sm-6 mb-4">
-                  <div className="catalog-card shadow-sm rounded-3 h-100 overflow-hidden">
+                  <div className="catalog-card shadow-sm rounded-3 h-100 overflow-hidden position-relative">
+                    {/* 🏷 Discount Ribbon */}
+                    {hasDiscount && (
+                      <div className="discount-ribbon position-absolute">
+                        <span>-{discountValue}</span>
+                      </div>
+                    )}
+
                     <Link to={`/products?catalog_id=${catalog.id}`}>
-                      <div className="catalog-image-wrapper">
+                      <div className="catalog-image-wrapper position-relative">
                         <img
                           src={firstImage}
                           alt={catalog.name}
@@ -153,12 +169,14 @@ export default function Catalogs() {
                         />
                       </div>
                     </Link>
+
                     <div className="catalog-info p-3">
                       <h5 className="fw-bold mb-2">{catalog.name}</h5>
                       <p className="text-muted mb-3">
                         {catalog.description?.length > 80
                           ? catalog.description.slice(0, 80) + "..."
-                          : catalog.description || t("catalogpage.default_description")}
+                          : catalog.description ||
+                          t("catalogpage.default_description")}
                       </p>
                       <Link
                         to={`/products?catalog_id=${catalog.id}`}
@@ -172,6 +190,7 @@ export default function Catalogs() {
               );
             })}
           </div>
+
 
           {!loading && !error && catalogs.length > 0 && renderPagination()}
         </div>

@@ -8,10 +8,13 @@ import {
   FiMapPin,
   FiBox,
 } from "react-icons/fi";
-import { useTranslation } from "react-i18next"; // ✅ Import i18next
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import AddReviewModal from "../review/AddReviewModal";
 
 export default function OrderCard({ order }) {
   const { t } = useTranslation();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const steps = [
     { key: "pending", label: t("ordercard.pending"), icon: <FiClock /> },
@@ -24,19 +27,19 @@ export default function OrderCard({ order }) {
   const status = String(order.status).toLowerCase();
   const currentIndex = steps.findIndex((s) => s.key === status);
   const cancelled = status === "cancelled";
+  const completed = status === "completed";
 
   return (
     <div className="modern-order-card">
-      {/* Header */}
       <div className="order-header">
         <h5>
           {t("ordercard.order")} #{order.id}
         </h5>
         <span
           className={`status-badge ${
-            status === "completed"
+            completed
               ? "completed"
-              : status === "cancelled"
+              : cancelled
               ? "cancelled"
               : "in-progress"
           }`}
@@ -48,12 +51,10 @@ export default function OrderCard({ order }) {
       {/* Timeline */}
       <div className={`icon-timeline ${cancelled ? "cancelled" : ""}`}>
         <div className="timeline-track"></div>
-
         <div className="timeline-steps">
           {steps.map((step, index) => {
             const isDone = index <= currentIndex && !cancelled;
             const isCurrent = index === currentIndex && !cancelled;
-
             return (
               <div
                 key={step.key}
@@ -80,21 +81,20 @@ export default function OrderCard({ order }) {
           ${parseFloat(order.total_price || 0).toFixed(2)}
         </p>
 
-        {/* Shipping */}
         {order.shipping_address && (
           <div className="mt-3">
             <p className="mb-1 fw-semibold">
-              <FiMapPin className="me-1 text-danger" /> {t("ordercard.shipping_address")}:
+              <FiMapPin className="me-1 text-danger" />{" "}
+              {t("ordercard.shipping_address")}:
             </p>
             <p className="small mb-0 text-muted">
               {order.shipping_address.recipient_name},{" "}
               {order.shipping_address.address_line},{" "}
-              {order.shipping_address.city}, {order.shipping_address.country} (
+              {order.shipping_address.city},{" "}
+              {order.shipping_address.country} (
               {order.shipping_address.postal_code})
             </p>
-            <p className="small text-muted">
-              📞 {order.shipping_address.phone}
-            </p>
+            <p className="small text-muted">📞 {order.shipping_address.phone}</p>
           </div>
         )}
 
@@ -116,7 +116,6 @@ export default function OrderCard({ order }) {
                   <span className="fw-semibold">{product.name}</span>
                   {variation && (
                     <>
-                      {" "}
                       <span className="badge bg-light text-dark ms-2">
                         {variation.value}
                       </span>
@@ -138,12 +137,29 @@ export default function OrderCard({ order }) {
                   <div className="small text-muted">
                     {t("ordercard.quantity")}: {item.quantity} × ${item.price}
                   </div>
+
+                  {completed && (
+                    <button
+                      className="btn btn-outline-primary btn-sm mt-2"
+                      onClick={() => setSelectedProduct(item)}
+                    >
+                      {t("ordercard.leave_review") || "Leave Review"}
+                    </button>
+                  )}
                 </li>
               );
             })}
           </ul>
         </div>
       </div>
+
+      {selectedProduct && (
+        <AddReviewModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onReviewAdded={() => console.log("✅ Review submitted")}
+        />
+      )}
     </div>
   );
 }
